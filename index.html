@@ -28,9 +28,8 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- Firebase Compat SDK -->
+  <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
@@ -61,13 +60,13 @@
       <form id="admin-login-form" class="w-full space-y-4">
         <div>
           <label data-i18n="admin_email_lbl" class="block text-xs font-medium text-zinc-400 mb-1">Admin Email</label>
-          <input type="email" id="admin-email" value="admin@flow.ai" required
+          <input type="email" id="admin-email" value="superadmin@flowstudio.com" required
             class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-zinc-500">
         </div>
 
         <div>
           <label data-i18n="admin_pass_lbl" class="block text-xs font-medium text-zinc-400 mb-1">Password</label>
-          <input type="password" id="admin-password" value="admin" required
+          <input type="password" id="admin-password" value="#Superadmin@tuhin" required
             class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-zinc-500">
         </div>
 
@@ -85,7 +84,6 @@
   <!-- ================= 2. ADMIN DASHBOARD ================= -->
   <div id="admin-main-app" class="hidden flex-1 flex w-full h-screen overflow-hidden relative">
     
-    <!-- Mobile Drawer Backdrop -->
     <div id="admin-mobile-backdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-30 hidden md:hidden"></div>
 
     <!-- SIDEBAR -->
@@ -99,7 +97,7 @@
             </div>
             <div>
               <div class="font-bold text-sm text-white leading-tight">Flow Admin</div>
-              <div class="text-[10px] text-zinc-500 font-mono">v3.0 Firebase Live</div>
+              <div class="text-[10px] text-emerald-400 font-mono">Firebase Real-time</div>
             </div>
           </div>
           <button onclick="toggleAdminDrawer()" class="md:hidden text-zinc-400 hover:text-white">
@@ -153,7 +151,6 @@
     <!-- CONTENT -->
     <main class="flex-1 flex flex-col h-full bg-adminBg overflow-y-auto min-w-0">
       
-      <!-- Top Bar -->
       <header class="h-16 border-b border-adminBorder px-4 sm:px-8 flex items-center justify-between bg-adminBg/70 backdrop-blur sticky top-0 z-30">
         <div class="flex items-center space-x-3">
           <button onclick="toggleAdminDrawer()" class="md:hidden p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-900">
@@ -161,12 +158,11 @@
           </button>
           <div>
             <h1 id="tab-title" class="text-sm sm:text-base font-semibold text-white">Customer Management</h1>
-            <p id="tab-subtitle" class="text-[11px] text-zinc-400 hidden sm:block">Create customer accounts and connect custom Base URL & API Keys</p>
+            <p id="tab-subtitle" class="text-[11px] text-zinc-400 hidden sm:block">Real-time Cloud Firestore Control</p>
           </div>
         </div>
 
         <div class="flex items-center space-x-2">
-          <!-- Language Switcher -->
           <button onclick="toggleAdminLanguage()" class="px-2.5 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 hover:text-white flex items-center space-x-1.5 transition">
             <i data-lucide="globe" class="w-3.5 h-3.5"></i>
             <span class="admin-lang-label font-mono font-bold">BN</span>
@@ -174,7 +170,6 @@
         </div>
       </header>
 
-      <!-- Content Area -->
       <div class="p-4 sm:p-8 max-w-6xl w-full mx-auto space-y-6">
 
         <!-- Metrics -->
@@ -182,7 +177,7 @@
           <div class="bg-adminCard border border-adminBorder p-4 rounded-2xl flex items-center justify-between">
             <div>
               <p data-i18n="stat_users" class="text-[10px] sm:text-[11px] text-zinc-400 uppercase font-medium">Total Users</p>
-              <h3 id="stat-total-users" class="text-xl sm:text-2xl font-bold text-white mt-0.5">1</h3>
+              <h3 id="stat-total-users" class="text-xl sm:text-2xl font-bold text-white mt-0.5">0</h3>
             </div>
             <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
               <i data-lucide="users" class="w-4 h-4 sm:w-5 sm:h-5"></i>
@@ -192,7 +187,7 @@
           <div class="bg-adminCard border border-adminBorder p-4 rounded-2xl flex items-center justify-between">
             <div>
               <p data-i18n="stat_models" class="text-[10px] sm:text-[11px] text-zinc-400 uppercase font-medium">Active Models</p>
-              <h3 id="stat-active-models" class="text-xl sm:text-2xl font-bold text-white mt-0.5">3</h3>
+              <h3 id="stat-active-models" class="text-xl sm:text-2xl font-bold text-white mt-0.5">0</h3>
             </div>
             <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
               <i data-lucide="cpu" class="w-4 h-4 sm:w-5 sm:h-5"></i>
@@ -214,7 +209,7 @@
               <p data-i18n="stat_status" class="text-[10px] sm:text-[11px] text-zinc-400 uppercase font-medium">Database</p>
               <h3 class="text-xs font-semibold text-emerald-400 mt-1 flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Active</span>
+                <span>Firestore Live</span>
               </h3>
             </div>
             <div class="w-9 h-9 rounded-xl bg-zinc-800 text-zinc-400 flex items-center justify-center">
@@ -239,7 +234,6 @@
             </button>
           </div>
 
-          <!-- Table -->
           <div class="bg-adminCard border border-adminBorder rounded-2xl overflow-x-auto shadow-xl">
             <table class="w-full text-left text-xs min-w-[650px]">
               <thead class="bg-[#101013] border-b border-adminBorder text-zinc-400 uppercase tracking-wider font-semibold">
@@ -318,7 +312,7 @@
     </main>
   </div>
 
-  <!-- ================= MODAL: ADD CUSTOMER (WITH BASE URL & KEY) ================= -->
+  <!-- ================= MODAL: ADD CUSTOMER ================= -->
   <div id="user-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-md bg-adminCard border border-adminBorder p-6 rounded-2xl shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
       
@@ -355,15 +349,12 @@
           </select>
         </div>
 
-        <!-- NEW: BASE / PAGE URL INPUT -->
         <div>
           <label class="block text-xs text-zinc-400 mb-1">Base URL / Endpoint URL</label>
           <input type="url" id="modal-baseurl" required value="https://openrouter.ai/api/v1" placeholder="https://openrouter.ai/api/v1"
             class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-zinc-500">
-          <span class="text-[10px] text-zinc-500">The endpoint URL where prompts will be routed for automatic credit deduction.</span>
         </div>
 
-        <!-- API KEY INPUT -->
         <div>
           <label class="block text-xs text-zinc-400 mb-1">Client Provider API Key</label>
           <input type="text" id="modal-apikey" required placeholder="sk-or-v1-xxxxxxxxxxxxxxxxxxxx"
@@ -445,30 +436,23 @@
 
   <!-- ================= SCRIPTS ================= -->
   <script>
-    // 1. FIREBASE CONFIGURATION
+    // 1. FIREBASE CONFIGURATION (Connected with provided credentials)
     const firebaseConfig = {
-      apiKey: "YOUR_FIREBASE_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyDdtiWw6gzYFqSyuq2-ufFzmJ1PZyL2bCE",
+      authDomain: "flow-studio-a283b.firebaseapp.com",
+      projectId: "flow-studio-a283b",
+      storageBucket: "flow-studio-a283b.firebasestorage.app",
+      messagingSenderId: "539719108009",
+      appId: "1:539719108009:web:b5978cbb311019703d30b8",
+      measurementId: "G-CT21P2M6XY"
     };
 
-    let fbActive = false;
-    let auth, db;
-    try {
-      if (firebaseConfig.apiKey !== "YOUR_FIREBASE_API_KEY") {
-        firebase.initializeApp(firebaseConfig);
-        auth = firebase.auth();
-        db = firebase.firestore();
-        fbActive = true;
-      }
-    } catch(e) {
-      console.warn("Firebase local fallback mode active");
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
+    const db = firebase.firestore();
 
-    // 2. INTERNATIONALIZATION (EN / BN)
+    // 2. INTERNATIONALIZATION
     const adminTranslations = {
       en: {
         admin_login_title: "Admin Control Center",
@@ -564,7 +548,7 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    // 3. MOBILE DRAWER TOGGLE
+    // 3. MOBILE DRAWER
     const adminSidebar = document.getElementById('admin-sidebar');
     const adminBackdrop = document.getElementById('admin-mobile-backdrop');
     function toggleAdminDrawer() {
@@ -573,24 +557,7 @@
     }
     adminBackdrop.addEventListener('click', toggleAdminDrawer);
 
-    // 4. STORAGE & SYNC
-    let users = JSON.parse(localStorage.getItem('flow_users')) || [
-      { id: '1', email: 'demo@gmail.com', password: '123456', provider: 'openrouter', baseUrl: 'https://openrouter.ai/api/v1', apiKey: 'sk-or-v1-998877665544332211', active: true }
-    ];
-
-    let models = JSON.parse(localStorage.getItem('flow_models')) || [
-      { id: "luma/dream-machine", name: "Luma Dream Machine", provider: "OpenRouter", active: true },
-      { id: "kling/v1.5", name: "Kling 1.5 Pro", provider: "Agent Router", active: true },
-      { id: "runway/gen-3", name: "Runway Gen-3 Alpha", provider: "OpenRouter", active: true }
-    ];
-
-    let siteConfig = JSON.parse(localStorage.getItem('flow_site_config')) || {
-      siteName: "Google Flow",
-      logoUrl: "",
-      disclaimer: "Google Flow can make mistakes, so double check it"
-    };
-
-    // 5. LOGIN
+    // 4. ADMIN AUTHENTICATION WITH CREDENTIALS
     const adminAuthScreen = document.getElementById('admin-auth-screen');
     const adminMainApp = document.getElementById('admin-main-app');
     const adminLoginForm = document.getElementById('admin-login-form');
@@ -601,10 +568,11 @@
       const email = document.getElementById('admin-email').value.trim();
       const pass = document.getElementById('admin-password').value;
 
-      if (email === 'admin@flow.ai' && pass === 'admin') {
+      // STRICT ADMIN CREDENTIALS CHECK
+      if (email === 'superadmin@flowstudio.com' && pass === '#Superadmin@tuhin') {
         adminAuthScreen.classList.add('hidden');
         adminMainApp.classList.remove('hidden');
-        refreshAdminData();
+        startFirestoreListeners();
       } else {
         adminLoginError.textContent = "Invalid Admin Credentials!";
         adminLoginError.classList.remove('hidden');
@@ -616,23 +584,7 @@
       adminAuthScreen.classList.remove('hidden');
     });
 
-    function refreshAdminData() {
-      renderUsersTable();
-      renderModelsList();
-      loadBrandingInputs();
-      renderAuditLogs();
-      updateMetricBadges();
-      renderIcons();
-    }
-
-    function updateMetricBadges() {
-      document.getElementById('stat-total-users').textContent = users.length;
-      document.getElementById('stat-active-models').textContent = models.filter(m => m.active !== false).length;
-      const history = JSON.parse(localStorage.getItem('flow_generations')) || [];
-      document.getElementById('stat-total-gens').textContent = history.length;
-    }
-
-    // 6. TABS
+    // 5. TABS
     function switchTab(tab) {
       document.getElementById('section-customers').classList.add('hidden');
       document.getElementById('section-models').classList.add('hidden');
@@ -647,17 +599,124 @@
       document.getElementById(`section-${tab}`).classList.remove('hidden');
       document.getElementById(`tab-btn-${tab}`).className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-adminActive text-white text-xs font-medium transition";
       
-      if (tab === 'logs') renderAuditLogs();
       if (window.innerWidth < 768) toggleAdminDrawer();
       renderIcons();
     }
 
-    // 7. USER TABLE & MODALS (WITH BASE URL)
+    // 6. REAL-TIME FIRESTORE SYNC & AUTO-SEED
+    let allUsers = [];
+    let allModels = [];
+
+    async function autoSeedDatabase() {
+      // Seed Models if collection is empty
+      const modelsSnap = await db.collection('models').get();
+      if (modelsSnap.empty) {
+        const defaults = [
+          { id: "luma/dream-machine", name: "Luma Dream Machine", active: true },
+          { id: "kling/v1.5", name: "Kling 1.5 Pro", active: true },
+          { id: "runway/gen-3", name: "Runway Gen-3 Alpha", active: true }
+        ];
+        for (const m of defaults) {
+          await db.collection('models').add(m);
+        }
+      }
+
+      // Seed Site Config if not exists
+      const configDoc = await db.collection('settings').doc('site_config').get();
+      if (!configDoc.exists) {
+        await db.collection('settings').doc('site_config').set({
+          siteName: "Google Flow",
+          logoUrl: "",
+          disclaimer: "Google Flow can make mistakes, so double check it"
+        });
+      }
+
+      // Seed Demo User if no users exist
+      const usersSnap = await db.collection('users').get();
+      if (usersSnap.empty) {
+        await db.collection('users').add({
+          email: "demo@gmail.com",
+          password: "123456",
+          provider: "openrouter",
+          baseUrl: "https://openrouter.ai/api/v1",
+          apiKey: "sk-or-v1-demo-key-12345",
+          active: true,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }
+    }
+
+    function startFirestoreListeners() {
+      autoSeedDatabase().then(() => {
+        // Users Listener
+        db.collection('users').onSnapshot(snap => {
+          allUsers = [];
+          snap.forEach(doc => allUsers.push({ id: doc.id, ...doc.data() }));
+          document.getElementById('stat-total-users').textContent = allUsers.length;
+          renderUsersTable();
+        });
+
+        // Models Listener
+        db.collection('models').onSnapshot(snap => {
+          allModels = [];
+          let activeCount = 0;
+          snap.forEach(doc => {
+            const data = { docId: doc.id, ...doc.data() };
+            allModels.push(data);
+            if (data.active !== false) activeCount++;
+          });
+          document.getElementById('stat-active-models').textContent = activeCount;
+          renderModelsList();
+        });
+
+        // Site Config Listener
+        db.collection('settings').doc('site_config').onSnapshot(doc => {
+          if (doc.exists) {
+            const data = doc.data();
+            document.getElementById('setting-site-name').value = data.siteName || '';
+            document.getElementById('setting-logo-url').value = data.logoUrl || '';
+            document.getElementById('setting-disclaimer').value = data.disclaimer || '';
+          }
+        });
+
+        // Generations Audit Logs Listener
+        db.collection('generations').onSnapshot(snap => {
+          document.getElementById('stat-total-gens').textContent = snap.size;
+          const box = document.getElementById('logs-container');
+          box.innerHTML = '';
+          if (snap.empty) {
+            box.innerHTML = `<div class="text-xs text-zinc-500 py-6 text-center">No video requests recorded yet.</div>`;
+            return;
+          }
+          snap.forEach(doc => {
+            const l = doc.data();
+            const item = document.createElement('div');
+            item.className = "p-3 rounded-xl bg-zinc-900/60 border border-zinc-800 text-xs flex items-center justify-between";
+            item.innerHTML = `
+              <div class="space-y-0.5">
+                <div class="flex items-center space-x-2">
+                  <span class="font-semibold text-white">${l.userEmail}</span>
+                  <span class="text-[10px] px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400 font-mono">${l.model}</span>
+                </div>
+                <p class="text-zinc-400 text-[11px] truncate max-w-xs sm:max-w-md italic">"${l.prompt}"</p>
+              </div>
+              <div class="text-right text-[10px] text-zinc-500 font-mono">
+                <div>${l.specs || 'Video'}</div>
+                <div>${l.createdAt || ''}</div>
+              </div>
+            `;
+            box.appendChild(item);
+          });
+        });
+
+      });
+    }
+
+    // 7. USER TABLE & MODALS
     function renderUsersTable(filter = '') {
       const tbody = document.getElementById('users-table-body');
       tbody.innerHTML = '';
-
-      const filtered = users.filter(u => u.email.toLowerCase().includes(filter.toLowerCase()));
+      const filtered = allUsers.filter(u => (u.email || '').toLowerCase().includes(filter.toLowerCase()));
 
       if (filtered.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-zinc-500">No customers found.</td></tr>`;
@@ -669,29 +728,29 @@
         tr.className = "hover:bg-zinc-900/40 transition";
         tr.innerHTML = `
           <td class="py-3.5 px-4 font-medium text-white flex items-center space-x-2">
-            <span class="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] text-zinc-300 uppercase">${u.email.charAt(0)}</span>
+            <span class="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] text-zinc-300 uppercase">${(u.email||'U').charAt(0)}</span>
             <span>${u.email}</span>
           </td>
           <td class="py-3.5 px-4 font-mono text-zinc-400">${u.password}</td>
           <td class="py-3.5 px-4">
             <div class="space-y-0.5">
               <div class="flex items-center space-x-1.5">
-                <span class="px-2 py-0.2 rounded text-[9px] uppercase font-semibold bg-zinc-800 text-zinc-300">${u.provider}</span>
+                <span class="px-2 py-0.2 rounded text-[9px] uppercase font-semibold bg-zinc-800 text-zinc-300">${u.provider || 'router'}</span>
                 <span class="font-mono text-[10px] text-zinc-400">${u.apiKey ? u.apiKey.substring(0, 8) + '••••' : 'None'}</span>
               </div>
               <div class="text-[10px] text-zinc-500 font-mono truncate max-w-xs">${u.baseUrl || 'https://openrouter.ai/api/v1'}</div>
             </div>
           </td>
           <td class="py-3.5 px-4">
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${u.active ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800' : 'bg-red-950/60 text-red-400 border border-red-800'}">
-              ${u.active ? 'Active' : 'Suspended'}
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${u.active !== false ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800' : 'bg-red-950/60 text-red-400 border border-red-800'}">
+              ${u.active !== false ? 'Active' : 'Suspended'}
             </span>
           </td>
           <td class="py-3.5 px-4 text-right space-x-1.5">
             <button onclick="openEditModal('${u.id}')" class="p-1.5 text-zinc-400 hover:text-white rounded hover:bg-zinc-800" title="Edit">
               <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
             </button>
-            <button onclick="toggleUserStatus('${u.id}')" class="p-1.5 text-zinc-400 hover:text-yellow-400 rounded hover:bg-zinc-800" title="Toggle Status">
+            <button onclick="toggleUserStatus('${u.id}', ${u.active !== false})" class="p-1.5 text-zinc-400 hover:text-yellow-400 rounded hover:bg-zinc-800" title="Toggle Status">
               <i data-lucide="power" class="w-3.5 h-3.5"></i>
             </button>
             <button onclick="deleteUser('${u.id}')" class="p-1.5 text-zinc-400 hover:text-red-400 rounded hover:bg-zinc-800" title="Delete">
@@ -706,9 +765,7 @@
 
     document.getElementById('search-users').addEventListener('input', (e) => renderUsersTable(e.target.value));
 
-    function openCreateUserModal() {
-      document.getElementById('user-modal').classList.replace('hidden', 'flex');
-    }
+    function openCreateUserModal() { document.getElementById('user-modal').classList.replace('hidden', 'flex'); }
     function closeUserModal() {
       document.getElementById('user-modal').classList.replace('flex', 'hidden');
       document.getElementById('create-user-form').reset();
@@ -716,28 +773,27 @@
 
     document.getElementById('create-user-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('modal-email').value.trim();
+      const email = document.getElementById('modal-email').value.trim().toLowerCase();
       const password = document.getElementById('modal-password').value.trim();
       const provider = document.getElementById('modal-provider').value;
       const baseUrl = document.getElementById('modal-baseurl').value.trim();
       const apiKey = document.getElementById('modal-apikey').value.trim();
 
-      const newUser = { id: Date.now().toString(), email, password, provider, baseUrl, apiKey, active: true };
-      
-      if (fbActive) {
-        try { await db.collection('users').doc(newUser.id).set(newUser); } catch(err){}
+      try {
+        await db.collection('users').add({
+          email, password, provider, baseUrl, apiKey,
+          active: true,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        closeUserModal();
+        showToast("Customer created in Firebase!");
+      } catch (err) {
+        alert("Firestore write error: " + err.message);
       }
-      users.unshift(newUser);
-      localStorage.setItem('flow_users', JSON.stringify(users));
-
-      renderUsersTable();
-      updateMetricBadges();
-      closeUserModal();
-      showToast("Customer Account Created with Endpoint & Key!");
     });
 
     function openEditModal(userId) {
-      const u = users.find(x => x.id === userId);
+      const u = allUsers.find(x => x.id === userId);
       if (!u) return;
       document.getElementById('edit-user-id').value = u.id;
       document.getElementById('edit-email').value = u.email;
@@ -748,62 +804,46 @@
 
       document.getElementById('edit-modal').classList.replace('hidden', 'flex');
     }
-    function closeEditModal() {
-      document.getElementById('edit-modal').classList.replace('flex', 'hidden');
-    }
+    function closeEditModal() { document.getElementById('edit-modal').classList.replace('flex', 'hidden'); }
 
     document.getElementById('edit-user-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('edit-user-id').value;
-      const u = users.find(x => x.id === id);
-      if (u) {
-        u.password = document.getElementById('edit-password').value.trim();
-        u.provider = document.getElementById('edit-provider').value;
-        u.baseUrl = document.getElementById('edit-baseurl').value.trim();
-        u.apiKey = document.getElementById('edit-apikey').value.trim();
+      const password = document.getElementById('edit-password').value.trim();
+      const provider = document.getElementById('edit-provider').value;
+      const baseUrl = document.getElementById('edit-baseurl').value.trim();
+      const apiKey = document.getElementById('edit-apikey').value.trim();
 
-        if (fbActive) {
-          try { await db.collection('users').doc(id).update(u); } catch(err){}
-        }
-        localStorage.setItem('flow_users', JSON.stringify(users));
-
-        renderUsersTable();
+      try {
+        await db.collection('users').doc(id).update({ password, provider, baseUrl, apiKey });
         closeEditModal();
-        showToast("Customer Settings Updated!");
+        showToast("Customer updated in Firebase!");
+      } catch (err) {
+        alert("Firestore error: " + err.message);
       }
     });
 
-    async function toggleUserStatus(userId) {
-      const u = users.find(x => x.id === userId);
-      if (u) {
-        u.active = !u.active;
-        if (fbActive) {
-          try { await db.collection('users').doc(userId).update({ active: u.active }); } catch(err){}
-        }
-        localStorage.setItem('flow_users', JSON.stringify(users));
-        renderUsersTable();
-        showToast(u.active ? "Account Activated" : "Account Suspended");
-      }
+    async function toggleUserStatus(userId, currentStatus) {
+      try {
+        await db.collection('users').doc(userId).update({ active: !currentStatus });
+        showToast("Status updated!");
+      } catch(e) { alert(e.message); }
     }
 
     async function deleteUser(userId) {
-      if (confirm("Delete this customer permanently?")) {
-        users = users.filter(x => x.id !== userId);
-        if (fbActive) {
-          try { await db.collection('users').doc(userId).delete(); } catch(err){}
-        }
-        localStorage.setItem('flow_users', JSON.stringify(users));
-        renderUsersTable();
-        updateMetricBadges();
-        showToast("Customer Deleted");
+      if (confirm("Delete customer permanently?")) {
+        try {
+          await db.collection('users').doc(userId).delete();
+          showToast("Customer deleted!");
+        } catch(e) { alert(e.message); }
       }
     }
 
-    // 8. MODELS CONTROL
+    // 8. MODELS CONTROL (FIRESTORE)
     function renderModelsList() {
       const list = document.getElementById('models-list');
       list.innerHTML = '';
-      models.forEach((m, idx) => {
+      allModels.forEach((m) => {
         const card = document.createElement('div');
         card.className = "bg-adminCard border border-adminBorder p-4 rounded-2xl flex items-center justify-between";
         card.innerHTML = `
@@ -811,84 +851,58 @@
             <span class="text-xs sm:text-sm font-semibold text-white">${m.name}</span>
             <div class="text-[10px] font-mono text-zinc-500">${m.id}</div>
           </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" ${m.active ? 'checked' : ''} onchange="toggleModel(${idx})" class="sr-only peer">
-            <div class="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-          </label>
+          <div class="flex items-center space-x-2">
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" ${m.active !== false ? 'checked' : ''} onchange="toggleModel('${m.docId}', ${m.active !== false})" class="sr-only peer">
+              <div class="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+            </label>
+            <button onclick="deleteModel('${m.docId}')" class="text-zinc-500 hover:text-red-400 p-1" title="Delete Model">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
         `;
         list.appendChild(card);
       });
       renderIcons();
     }
 
-    async function toggleModel(index) {
-      models[index].active = !models[index].active;
-      if (fbActive) {
-        try { await db.collection('models').doc(models[index].id).set(models[index]); } catch(e){}
-      }
-      localStorage.setItem('flow_models', JSON.stringify(models));
-      updateMetricBadges();
-      showToast("Model Availability Toggled!");
+    async function toggleModel(docId, currentActive) {
+      try {
+        await db.collection('models').doc(docId).update({ active: !currentActive });
+        showToast("Model visibility updated!");
+      } catch(e) { alert(e.message); }
     }
 
-    function openAddModelModal() {
-      const name = prompt("Model Display Name (e.g. Sora 2):");
+    async function deleteModel(docId) {
+      if (confirm("Delete this model permanently?")) {
+        try {
+          await db.collection('models').doc(docId).delete();
+          showToast("Model deleted!");
+        } catch(e) { alert(e.message); }
+      }
+    }
+
+    async function openAddModelModal() {
+      const name = prompt("Model Display Name (e.g. Sora 2 Turbo):");
       if (!name) return;
-      const id = prompt("Model Slug/ID (e.g. openai/sora):");
+      const id = prompt("Model Slug / ID (e.g. openai/sora-turbo):");
       if (!id) return;
-      models.push({ id, name, active: true });
-      localStorage.setItem('flow_models', JSON.stringify(models));
-      renderModelsList();
-      updateMetricBadges();
-      showToast("New Model Added!");
+      try {
+        await db.collection('models').add({ id, name, active: true });
+        showToast("New model added to Firebase!");
+      } catch(e) { alert(e.message); }
     }
 
-    // 9. BRANDING
-    function loadBrandingInputs() {
-      document.getElementById('setting-site-name').value = siteConfig.siteName || '';
-      document.getElementById('setting-logo-url').value = siteConfig.logoUrl || '';
-      document.getElementById('setting-disclaimer').value = siteConfig.disclaimer || '';
-    }
-
+    // 9. BRANDING (FIRESTORE)
     async function saveSiteBranding() {
-      siteConfig.siteName = document.getElementById('setting-site-name').value.trim() || 'Google Flow';
-      siteConfig.logoUrl = document.getElementById('setting-logo-url').value.trim();
-      siteConfig.disclaimer = document.getElementById('setting-disclaimer').value.trim();
+      const siteName = document.getElementById('setting-site-name').value.trim() || 'Google Flow';
+      const logoUrl = document.getElementById('setting-logo-url').value.trim();
+      const disclaimer = document.getElementById('setting-disclaimer').value.trim();
 
-      if (fbActive) {
-        try { await db.collection('settings').doc('site_config').set(siteConfig); } catch(e){}
-      }
-      localStorage.setItem('flow_site_config', JSON.stringify(siteConfig));
-      showToast("Branding Settings Saved!");
-    }
-
-    // 10. AUDIT LOGS
-    function renderAuditLogs() {
-      const logs = JSON.parse(localStorage.getItem('flow_generations')) || [];
-      const box = document.getElementById('logs-container');
-      box.innerHTML = '';
-      if (logs.length === 0) {
-        box.innerHTML = `<div class="text-xs text-zinc-500 py-6 text-center">No video requests recorded yet.</div>`;
-        return;
-      }
-      logs.forEach(l => {
-        const item = document.createElement('div');
-        item.className = "p-3 rounded-xl bg-zinc-900/60 border border-zinc-800 text-xs flex items-center justify-between";
-        item.innerHTML = `
-          <div class="space-y-0.5">
-            <div class="flex items-center space-x-2">
-              <span class="font-semibold text-white">${l.userEmail}</span>
-              <span class="text-[10px] px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400 font-mono">${l.model}</span>
-            </div>
-            <p class="text-zinc-400 text-[11px] truncate max-w-xs sm:max-w-md italic">"${l.prompt}"</p>
-          </div>
-          <div class="text-right text-[10px] text-zinc-500 font-mono">
-            <div>${l.specs || 'Video'}</div>
-            <div>${l.createdAt || ''}</div>
-          </div>
-        `;
-        box.appendChild(item);
-      });
+      try {
+        await db.collection('settings').doc('site_config').set({ siteName, logoUrl, disclaimer });
+        showToast("Branding saved to Firebase!");
+      } catch(e) { alert(e.message); }
     }
 
     function showToast(msg) {
@@ -902,7 +916,6 @@
       }, 3000);
     }
 
-    // Init
     setAdminLanguage(currentAdminLang);
     renderIcons();
   </script>
