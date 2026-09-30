@@ -60,14 +60,19 @@
       <form id="admin-login-form" class="w-full space-y-4">
         <div>
           <label data-i18n="admin_email_lbl" class="block text-xs font-medium text-zinc-400 mb-1">Admin Email</label>
-          <input type="email" id="admin-email" value="superadmin@flowstudio.com" required
-            class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-zinc-500">
+          <input type="email" id="admin-email" required placeholder="superadmin@flowstudio.com"
+            class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500">
         </div>
 
         <div>
           <label data-i18n="admin_pass_lbl" class="block text-xs font-medium text-zinc-400 mb-1">Password</label>
-          <input type="password" id="admin-password" value="#Superadmin@tuhin" required
-            class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-zinc-500">
+          <div class="relative">
+            <input type="password" id="admin-password" required placeholder="••••••••"
+              class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2.5 pr-10 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500">
+            <button type="button" onclick="toggleAdminPassVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white">
+              <i id="admin-eye-icon" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
         </div>
 
         <div id="admin-login-error" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/50 p-2.5 rounded-lg text-center"></div>
@@ -436,7 +441,7 @@
 
   <!-- ================= SCRIPTS ================= -->
   <script>
-    // 1. FIREBASE CONFIGURATION (Connected with provided credentials)
+    // 1. FIREBASE CONFIGURATION
     const firebaseConfig = {
       apiKey: "AIzaSyDdtiWw6gzYFqSyuq2-ufFzmJ1PZyL2bCE",
       authDomain: "flow-studio-a283b.firebaseapp.com",
@@ -548,6 +553,20 @@
       if (window.lucide) lucide.createIcons();
     }
 
+    // Admin Password Eye Toggle
+    function toggleAdminPassVisibility() {
+      const pass = document.getElementById('admin-password');
+      const icon = document.getElementById('admin-eye-icon');
+      if (pass.type === 'password') {
+        pass.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        pass.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      renderIcons();
+    }
+
     // 3. MOBILE DRAWER
     const adminSidebar = document.getElementById('admin-sidebar');
     const adminBackdrop = document.getElementById('admin-mobile-backdrop');
@@ -557,11 +576,19 @@
     }
     adminBackdrop.addEventListener('click', toggleAdminDrawer);
 
-    // 4. ADMIN AUTHENTICATION WITH CREDENTIALS
+    // 4. ADMIN AUTHENTICATION WITH SESSION PERSISTENCE
     const adminAuthScreen = document.getElementById('admin-auth-screen');
     const adminMainApp = document.getElementById('admin-main-app');
     const adminLoginForm = document.getElementById('admin-login-form');
     const adminLoginError = document.getElementById('admin-login-error');
+
+    function checkAdminSession() {
+      if (sessionStorage.getItem('flow_admin_logged') === 'true') {
+        adminAuthScreen.classList.add('hidden');
+        adminMainApp.classList.remove('hidden');
+        startFirestoreListeners();
+      }
+    }
 
     adminLoginForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -570,6 +597,7 @@
 
       // STRICT ADMIN CREDENTIALS CHECK
       if (email === 'superadmin@flowstudio.com' && pass === '#Superadmin@tuhin') {
+        sessionStorage.setItem('flow_admin_logged', 'true');
         adminAuthScreen.classList.add('hidden');
         adminMainApp.classList.remove('hidden');
         startFirestoreListeners();
@@ -580,6 +608,7 @@
     });
 
     document.getElementById('admin-logout-btn').addEventListener('click', () => {
+      sessionStorage.removeItem('flow_admin_logged');
       adminMainApp.classList.add('hidden');
       adminAuthScreen.classList.remove('hidden');
     });
@@ -608,20 +637,18 @@
     let allModels = [];
 
     async function autoSeedDatabase() {
-      // Seed Models if collection is empty
       const modelsSnap = await db.collection('models').get();
       if (modelsSnap.empty) {
         const defaults = [
-          { id: "luma/dream-machine", name: "Luma Dream Machine", active: true },
-          { id: "kling/v1.5", name: "Kling 1.5 Pro", active: true },
-          { id: "runway/gen-3", name: "Runway Gen-3 Alpha", active: true }
+          { id: "deepseek/deepseek-r1:free", name: "DeepSeek R1 (Free)", active: true },
+          { id: "google/gemini-2.0-flash-exp:free", name: "Gemini 2.0 Flash (Free)", active: true },
+          { id: "meta-llama/llama-3.3-70b-instruct:free", name: "Llama 3.3 70B (Free)", active: true }
         ];
         for (const m of defaults) {
           await db.collection('models').add(m);
         }
       }
 
-      // Seed Site Config if not exists
       const configDoc = await db.collection('settings').doc('site_config').get();
       if (!configDoc.exists) {
         await db.collection('settings').doc('site_config').set({
@@ -630,25 +657,11 @@
           disclaimer: "Google Flow can make mistakes, so double check it"
         });
       }
-
-      // Seed Demo User if no users exist
-      const usersSnap = await db.collection('users').get();
-      if (usersSnap.empty) {
-        await db.collection('users').add({
-          email: "demo@gmail.com",
-          password: "123456",
-          provider: "openrouter",
-          baseUrl: "https://openrouter.ai/api/v1",
-          apiKey: "sk-or-v1-demo-key-12345",
-          active: true,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      }
     }
 
     function startFirestoreListeners() {
       autoSeedDatabase().then(() => {
-        // Users Listener
+        // Users
         db.collection('users').onSnapshot(snap => {
           allUsers = [];
           snap.forEach(doc => allUsers.push({ id: doc.id, ...doc.data() }));
@@ -656,7 +669,7 @@
           renderUsersTable();
         });
 
-        // Models Listener
+        // Models
         db.collection('models').onSnapshot(snap => {
           allModels = [];
           let activeCount = 0;
@@ -669,7 +682,7 @@
           renderModelsList();
         });
 
-        // Site Config Listener
+        // Site Config
         db.collection('settings').doc('site_config').onSnapshot(doc => {
           if (doc.exists) {
             const data = doc.data();
@@ -679,13 +692,13 @@
           }
         });
 
-        // Generations Audit Logs Listener
+        // Generations Audit Logs
         db.collection('generations').onSnapshot(snap => {
           document.getElementById('stat-total-gens').textContent = snap.size;
           const box = document.getElementById('logs-container');
           box.innerHTML = '';
           if (snap.empty) {
-            box.innerHTML = `<div class="text-xs text-zinc-500 py-6 text-center">No video requests recorded yet.</div>`;
+            box.innerHTML = `<div class="text-xs text-zinc-500 py-6 text-center">No requests recorded yet.</div>`;
             return;
           }
           snap.forEach(doc => {
@@ -883,9 +896,9 @@
     }
 
     async function openAddModelModal() {
-      const name = prompt("Model Display Name (e.g. Sora 2 Turbo):");
+      const name = prompt("Model Display Name (e.g. DeepSeek R1 Free):");
       if (!name) return;
-      const id = prompt("Model Slug / ID (e.g. openai/sora-turbo):");
+      const id = prompt("Model Slug / ID (e.g. deepseek/deepseek-r1:free):");
       if (!id) return;
       try {
         await db.collection('models').add({ id, name, active: true });
@@ -893,7 +906,7 @@
       } catch(e) { alert(e.message); }
     }
 
-    // 9. BRANDING (FIRESTORE)
+    // 9. BRANDING
     async function saveSiteBranding() {
       const siteName = document.getElementById('setting-site-name').value.trim() || 'Google Flow';
       const logoUrl = document.getElementById('setting-logo-url').value.trim();
@@ -917,6 +930,7 @@
     }
 
     setAdminLanguage(currentAdminLang);
+    checkAdminSession();
     renderIcons();
   </script>
 </body>
