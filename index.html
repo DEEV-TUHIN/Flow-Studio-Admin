@@ -102,7 +102,7 @@
             </div>
             <div>
               <div class="font-bold text-sm text-white leading-tight">Flow Admin</div>
-              <div class="text-[10px] text-emerald-400 font-mono">Firebase Real-time</div>
+              <div class="text-[10px] text-emerald-400 font-mono">100% Dynamic Engine</div>
             </div>
           </div>
           <button onclick="toggleAdminDrawer()" class="md:hidden text-zinc-400 hover:text-white">
@@ -345,24 +345,24 @@
         </div>
 
         <div>
-          <label class="block text-xs text-zinc-400 mb-1">Router / Provider Name</label>
+          <label class="block text-xs text-zinc-400 mb-1">Provider Type</label>
           <select id="modal-provider" 
             class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-zinc-500">
-            <option value="openrouter">OpenRouter</option>
-            <option value="agentrouter">Agent Router</option>
-            <option value="custom">Custom Proxy Router</option>
+            <option value="fal">Fal.ai (Video Queue Engine)</option>
+            <option value="openrouter">OpenRouter / AgentRouter (Chat LLM)</option>
+            <option value="custom">Custom Endpoint</option>
           </select>
         </div>
 
         <div>
           <label class="block text-xs text-zinc-400 mb-1">Base URL / Endpoint URL</label>
-          <input type="url" id="modal-baseurl" required value="https://openrouter.ai/api/v1" placeholder="https://openrouter.ai/api/v1"
+          <input type="url" id="modal-baseurl" required value="https://queue.fal.run" placeholder="https://queue.fal.run"
             class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-zinc-500">
         </div>
 
         <div>
-          <label class="block text-xs text-zinc-400 mb-1">Client Provider API Key</label>
-          <input type="text" id="modal-apikey" required placeholder="sk-or-v1-xxxxxxxxxxxxxxxxxxxx"
+          <label class="block text-xs text-zinc-400 mb-1">API Key</label>
+          <input type="text" id="modal-apikey" required placeholder="Your API Key"
             class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-zinc-500">
         </div>
 
@@ -404,12 +404,12 @@
         </div>
 
         <div>
-          <label class="block text-xs text-zinc-400 mb-1">Router / Provider Name</label>
+          <label class="block text-xs text-zinc-400 mb-1">Provider Type</label>
           <select id="edit-provider" 
             class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-zinc-500">
-            <option value="openrouter">OpenRouter</option>
-            <option value="agentrouter">Agent Router</option>
-            <option value="custom">Custom Proxy Router</option>
+            <option value="fal">Fal.ai (Video Queue Engine)</option>
+            <option value="openrouter">OpenRouter / AgentRouter (Chat LLM)</option>
+            <option value="custom">Custom Endpoint</option>
           </select>
         </div>
 
@@ -553,7 +553,6 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    // Admin Password Eye Toggle
     function toggleAdminPassVisibility() {
       const pass = document.getElementById('admin-password');
       const icon = document.getElementById('admin-eye-icon');
@@ -576,7 +575,7 @@
     }
     adminBackdrop.addEventListener('click', toggleAdminDrawer);
 
-    // 4. ADMIN AUTHENTICATION WITH SESSION PERSISTENCE
+    // 4. ADMIN AUTHENTICATION
     const adminAuthScreen = document.getElementById('admin-auth-screen');
     const adminMainApp = document.getElementById('admin-main-app');
     const adminLoginForm = document.getElementById('admin-login-form');
@@ -595,7 +594,6 @@
       const email = document.getElementById('admin-email').value.trim();
       const pass = document.getElementById('admin-password').value;
 
-      // STRICT ADMIN CREDENTIALS CHECK
       if (email === 'superadmin@flowstudio.com' && pass === '#Superadmin@tuhin') {
         sessionStorage.setItem('flow_admin_logged', 'true');
         adminAuthScreen.classList.add('hidden');
@@ -632,96 +630,70 @@
       renderIcons();
     }
 
-    // 6. REAL-TIME FIRESTORE SYNC & AUTO-SEED
+    // 6. REAL-TIME FIRESTORE SYNC (Zero Hardcoded Models Injected)
     let allUsers = [];
     let allModels = [];
 
-    async function autoSeedDatabase() {
-      const modelsSnap = await db.collection('models').get();
-      if (modelsSnap.empty) {
-        const defaults = [
-          { id: "deepseek/deepseek-r1:free", name: "DeepSeek R1 (Free)", active: true },
-          { id: "google/gemini-2.0-flash-exp:free", name: "Gemini 2.0 Flash (Free)", active: true },
-          { id: "meta-llama/llama-3.3-70b-instruct:free", name: "Llama 3.3 70B (Free)", active: true }
-        ];
-        for (const m of defaults) {
-          await db.collection('models').add(m);
-        }
-      }
-
-      const configDoc = await db.collection('settings').doc('site_config').get();
-      if (!configDoc.exists) {
-        await db.collection('settings').doc('site_config').set({
-          siteName: "Google Flow",
-          logoUrl: "",
-          disclaimer: "Google Flow can make mistakes, so double check it"
-        });
-      }
-    }
-
     function startFirestoreListeners() {
-      autoSeedDatabase().then(() => {
-        // Users
-        db.collection('users').onSnapshot(snap => {
-          allUsers = [];
-          snap.forEach(doc => allUsers.push({ id: doc.id, ...doc.data() }));
-          document.getElementById('stat-total-users').textContent = allUsers.length;
-          renderUsersTable();
-        });
+      // Users
+      db.collection('users').onSnapshot(snap => {
+        allUsers = [];
+        snap.forEach(doc => allUsers.push({ id: doc.id, ...doc.data() }));
+        document.getElementById('stat-total-users').textContent = allUsers.length;
+        renderUsersTable();
+      });
 
-        // Models
-        db.collection('models').onSnapshot(snap => {
-          allModels = [];
-          let activeCount = 0;
-          snap.forEach(doc => {
-            const data = { docId: doc.id, ...doc.data() };
-            allModels.push(data);
-            if (data.active !== false) activeCount++;
-          });
-          document.getElementById('stat-active-models').textContent = activeCount;
-          renderModelsList();
+      // Models
+      db.collection('models').onSnapshot(snap => {
+        allModels = [];
+        let activeCount = 0;
+        snap.forEach(doc => {
+          const data = { docId: doc.id, ...doc.data() };
+          allModels.push(data);
+          if (data.active !== false) activeCount++;
         });
+        document.getElementById('stat-active-models').textContent = activeCount;
+        renderModelsList();
+      });
 
-        // Site Config
-        db.collection('settings').doc('site_config').onSnapshot(doc => {
-          if (doc.exists) {
-            const data = doc.data();
-            document.getElementById('setting-site-name').value = data.siteName || '';
-            document.getElementById('setting-logo-url').value = data.logoUrl || '';
-            document.getElementById('setting-disclaimer').value = data.disclaimer || '';
-          }
-        });
+      // Site Config
+      db.collection('settings').doc('site_config').onSnapshot(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById('setting-site-name').value = data.siteName || '';
+          document.getElementById('setting-logo-url').value = data.logoUrl || '';
+          document.getElementById('setting-disclaimer').value = data.disclaimer || '';
+        }
+      });
 
-        // Generations Audit Logs
-        db.collection('generations').onSnapshot(snap => {
-          document.getElementById('stat-total-gens').textContent = snap.size;
-          const box = document.getElementById('logs-container');
-          box.innerHTML = '';
-          if (snap.empty) {
-            box.innerHTML = `<div class="text-xs text-zinc-500 py-6 text-center">No requests recorded yet.</div>`;
-            return;
-          }
-          snap.forEach(doc => {
-            const l = doc.data();
-            const item = document.createElement('div');
-            item.className = "p-3 rounded-xl bg-zinc-900/60 border border-zinc-800 text-xs flex items-center justify-between";
-            item.innerHTML = `
-              <div class="space-y-0.5">
-                <div class="flex items-center space-x-2">
-                  <span class="font-semibold text-white">${l.userEmail}</span>
-                  <span class="text-[10px] px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400 font-mono">${l.model}</span>
-                </div>
-                <p class="text-zinc-400 text-[11px] truncate max-w-xs sm:max-w-md italic">"${l.prompt}"</p>
+      // Audit Logs
+      db.collection('generations').onSnapshot(snap => {
+        document.getElementById('stat-total-gens').textContent = snap.size;
+        const box = document.getElementById('logs-container');
+        box.innerHTML = '';
+        if (snap.empty) {
+          box.innerHTML = `<div class="text-xs text-zinc-500 py-6 text-center">No requests recorded yet.</div>`;
+          return;
+        }
+        snap.forEach(doc => {
+          const l = doc.data();
+          const item = document.createElement('div');
+          item.className = "p-3 rounded-xl bg-zinc-900/60 border border-zinc-800 text-xs flex items-center justify-between";
+          item.innerHTML = `
+            <div class="space-y-0.5">
+              <div class="flex items-center space-x-2">
+                <span class="font-semibold text-white">${l.userEmail}</span>
+                <span class="text-[10px] px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400 font-mono">${l.model}</span>
               </div>
-              <div class="text-right text-[10px] text-zinc-500 font-mono">
-                <div>${l.specs || 'Video'}</div>
-                <div>${l.createdAt || ''}</div>
-              </div>
-            `;
-            box.appendChild(item);
-          });
+              <p class="text-zinc-400 text-[11px] truncate max-w-xs sm:max-w-md italic">"${l.prompt}"</p>
+            </div>
+            <div class="text-right text-[10px] text-zinc-500 font-mono">
+              <div>${l.specs || 'Video'}</div>
+              <div>${l.createdAt || ''}</div>
+            </div>
+          `;
+          box.appendChild(item);
         });
-
       });
     }
 
@@ -751,7 +723,7 @@
                 <span class="px-2 py-0.2 rounded text-[9px] uppercase font-semibold bg-zinc-800 text-zinc-300">${u.provider || 'router'}</span>
                 <span class="font-mono text-[10px] text-zinc-400">${u.apiKey ? u.apiKey.substring(0, 8) + '••••' : 'None'}</span>
               </div>
-              <div class="text-[10px] text-zinc-500 font-mono truncate max-w-xs">${u.baseUrl || 'https://openrouter.ai/api/v1'}</div>
+              <div class="text-[10px] text-zinc-500 font-mono truncate max-w-xs">${u.baseUrl || 'https://queue.fal.run'}</div>
             </div>
           </td>
           <td class="py-3.5 px-4">
@@ -811,8 +783,8 @@
       document.getElementById('edit-user-id').value = u.id;
       document.getElementById('edit-email').value = u.email;
       document.getElementById('edit-password').value = u.password;
-      document.getElementById('edit-provider').value = u.provider || 'openrouter';
-      document.getElementById('edit-baseurl').value = u.baseUrl || 'https://openrouter.ai/api/v1';
+      document.getElementById('edit-provider').value = u.provider || 'fal';
+      document.getElementById('edit-baseurl').value = u.baseUrl || 'https://queue.fal.run';
       document.getElementById('edit-apikey').value = u.apiKey || '';
 
       document.getElementById('edit-modal').classList.replace('hidden', 'flex');
@@ -852,17 +824,21 @@
       }
     }
 
-    // 8. MODELS CONTROL (FIRESTORE)
+    // 8. PURE DYNAMIC MODELS CONTROL (Add Any AI Model Slug)
     function renderModelsList() {
       const list = document.getElementById('models-list');
       list.innerHTML = '';
+      if (allModels.length === 0) {
+        list.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-zinc-500">No models added yet. Click "Add Custom Model" to add your first AI model.</div>`;
+        return;
+      }
       allModels.forEach((m) => {
         const card = document.createElement('div');
         card.className = "bg-adminCard border border-adminBorder p-4 rounded-2xl flex items-center justify-between";
         card.innerHTML = `
           <div class="space-y-0.5">
             <span class="text-xs sm:text-sm font-semibold text-white">${m.name}</span>
-            <div class="text-[10px] font-mono text-zinc-500">${m.id}</div>
+            <div class="text-[10px] font-mono text-zinc-400">${m.id}</div>
           </div>
           <div class="flex items-center space-x-2">
             <label class="relative inline-flex items-center cursor-pointer">
@@ -896,13 +872,13 @@
     }
 
     async function openAddModelModal() {
-      const name = prompt("Model Display Name (e.g. DeepSeek R1 Free):");
+      const name = prompt("Model Display Name (যেমন: Wan 2.1 Video):");
       if (!name) return;
-      const id = prompt("Model Slug / ID (e.g. deepseek/deepseek-r1:free):");
+      const id = prompt("Model Slug / ID (যেমন: fal-ai/wan-t2v):");
       if (!id) return;
       try {
-        await db.collection('models').add({ id, name, active: true });
-        showToast("New model added to Firebase!");
+        await db.collection('models').add({ id: id.trim(), name: name.trim(), active: true });
+        showToast("Model added successfully!");
       } catch(e) { alert(e.message); }
     }
 
