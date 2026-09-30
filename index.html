@@ -37,116 +37,212 @@
 </head>
 <body class="bg-adminBg text-zinc-200 min-h-screen flex flex-col font-sans select-none overflow-hidden">
 
-  <!-- 1. ADMIN LOGIN -->
+  <!-- ================= 1. ADMIN LOGIN ================= -->
   <div id="admin-auth-screen" class="fixed inset-0 z-50 bg-[#060608] flex items-center justify-center p-4">
     <div class="w-full max-w-sm bg-adminCard border border-adminBorder p-6 sm:p-8 rounded-2xl shadow-2xl flex flex-col items-center">
+      
+      <div class="w-full flex justify-end mb-2">
+        <button onclick="toggleAdminLanguage()" class="text-xs px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white flex items-center space-x-1">
+          <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+          <span class="admin-lang-label font-mono">BN</span>
+        </button>
+      </div>
+
       <div class="w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center mb-3 text-white">
         <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
       </div>
-      <h2 class="text-lg font-bold text-white tracking-wide">Admin Control Center</h2>
-      <p class="text-xs text-zinc-400 mb-6 text-center">Multi-Account Google Automation Manager</p>
+      <h2 data-i18n="admin_login_title" class="text-lg font-bold text-white tracking-wide">Admin Control Center</h2>
+      <p data-i18n="admin_login_sub" class="text-xs text-zinc-400 mb-6 text-center">Manage accounts, dedicated Google profiles & models</p>
 
       <form id="admin-login-form" class="w-full space-y-4">
         <div>
-          <label class="block text-xs font-medium text-zinc-400 mb-1">Admin Email</label>
+          <label data-i18n="admin_email_lbl" class="block text-xs font-medium text-zinc-400 mb-1">Admin Email</label>
           <input type="email" id="admin-email" required placeholder="superadmin@flowstudio.com"
-            class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-zinc-500">
+            class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500">
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-zinc-400 mb-1">Password</label>
-          <input type="password" id="admin-password" required placeholder="••••••••"
-            class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-zinc-500">
+          <label data-i18n="admin_pass_lbl" class="block text-xs font-medium text-zinc-400 mb-1">Password</label>
+          <div class="relative">
+            <input type="password" id="admin-password" required placeholder="••••••••"
+              class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2.5 pr-10 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500">
+            <button type="button" onclick="toggleAdminPassVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white">
+              <i id="admin-eye-icon" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
         </div>
 
         <div id="admin-login-error" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/50 p-2.5 rounded-lg text-center"></div>
 
         <button type="submit"
           class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-sm rounded-xl transition flex items-center justify-center space-x-2">
-          <span>Enter Dashboard</span>
+          <span data-i18n="btn_enter_dashboard">Enter Dashboard</span>
           <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </button>
       </form>
     </div>
   </div>
 
-  <!-- 2. ADMIN DASHBOARD -->
+  <!-- ================= 2. ADMIN DASHBOARD ================= -->
   <div id="admin-main-app" class="hidden flex-1 flex w-full h-screen overflow-hidden relative">
     
-    <aside id="admin-sidebar" class="w-64 border-r border-adminBorder bg-adminSidebar flex flex-col justify-between p-4">
+    <div id="admin-mobile-backdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-30 hidden md:hidden"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="admin-sidebar" class="fixed md:static inset-y-0 left-0 z-40 w-64 border-r border-adminBorder bg-adminSidebar flex flex-col justify-between p-4 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
       <div class="space-y-6">
-        <div class="flex items-center space-x-3 px-2 pt-1">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-            <i data-lucide="command" class="w-4 h-4"></i>
+        
+        <div class="flex items-center justify-between px-2 pt-1">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <i data-lucide="command" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="font-bold text-sm text-white leading-tight">Flow Admin</div>
+              <div class="text-[10px] text-emerald-400 font-mono">Google Session Engine</div>
+            </div>
           </div>
-          <div>
-            <div class="font-bold text-sm text-white">Flow Admin</div>
-            <div class="text-[10px] text-emerald-400 font-mono">Google Session Engine</div>
-          </div>
+          <button onclick="toggleAdminDrawer()" class="md:hidden text-zinc-400 hover:text-white">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
         </div>
 
         <nav class="space-y-1">
           <button onclick="switchTab('customers')" id="tab-btn-customers" 
             class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-adminActive text-white text-xs font-medium transition">
             <i data-lucide="users" class="w-4 h-4 text-emerald-400"></i>
-            <span>Customer & Google Accounts</span>
+            <span data-i18n="tab_users">Customer Management</span>
           </button>
 
           <button onclick="switchTab('models')" id="tab-btn-models" 
             class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-adminHover hover:text-white text-xs font-medium transition">
             <i data-lucide="cpu" class="w-4 h-4 text-purple-400"></i>
-            <span>AI Model Controls</span>
+            <span data-i18n="tab_models">AI Model Controls</span>
           </button>
 
-          <button onclick="switchTab('tasks')" id="tab-btn-tasks" 
+          <button onclick="switchTab('branding')" id="tab-btn-branding" 
+            class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-adminHover hover:text-white text-xs font-medium transition">
+            <i data-lucide="palette" class="w-4 h-4 text-blue-400"></i>
+            <span data-i18n="tab_branding">Branding & Design</span>
+          </button>
+
+          <button onclick="switchTab('logs')" id="tab-btn-logs" 
             class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-adminHover hover:text-white text-xs font-medium transition">
             <i data-lucide="activity" class="w-4 h-4 text-yellow-400"></i>
-            <span>Live Automation Queue</span>
+            <span data-i18n="tab_logs">Audit Logs</span>
           </button>
         </nav>
       </div>
 
       <div class="pt-3 border-t border-adminBorder/60 space-y-2">
+        <a href="index.html" target="_blank" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:bg-zinc-800 text-xs transition">
+          <span class="flex items-center space-x-2">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span data-i18n="btn_open_site">Open Flow Website</span>
+          </span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+        </a>
         <button id="admin-logout-btn" 
           class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-red-400 hover:bg-red-950/20 text-xs font-medium transition">
           <i data-lucide="log-out" class="w-4 h-4"></i>
-          <span>Admin Logout</span>
+          <span data-i18n="btn_admin_logout">Admin Logout</span>
         </button>
       </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="flex-1 flex flex-col h-full bg-adminBg overflow-y-auto">
+    <!-- CONTENT -->
+    <main class="flex-1 flex flex-col h-full bg-adminBg overflow-y-auto min-w-0">
       
-      <header class="h-16 border-b border-adminBorder px-8 flex items-center justify-between bg-adminBg/70 backdrop-blur sticky top-0 z-30">
-        <div>
-          <h1 id="tab-title" class="text-base font-semibold text-white">Customer & Google Account Manager</h1>
-          <p id="tab-subtitle" class="text-[11px] text-zinc-400">Assign individual Google Pro session cookies to each customer</p>
+      <header class="h-16 border-b border-adminBorder px-4 sm:px-8 flex items-center justify-between bg-adminBg/70 backdrop-blur sticky top-0 z-30">
+        <div class="flex items-center space-x-3">
+          <button onclick="toggleAdminDrawer()" class="md:hidden p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-900">
+            <i data-lucide="menu" class="w-4 h-4"></i>
+          </button>
+          <div>
+            <h1 id="tab-title" class="text-sm sm:text-base font-semibold text-white">Customer Management</h1>
+            <p id="tab-subtitle" class="text-[11px] text-zinc-400 hidden sm:block">Assign dedicated Google Pro profiles & cookies to individual clients</p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="toggleAdminLanguage()" class="px-2.5 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 hover:text-white flex items-center space-x-1.5 transition">
+            <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+            <span class="admin-lang-label font-mono font-bold">BN</span>
+          </button>
         </div>
       </header>
 
-      <div class="p-8 max-w-6xl w-full mx-auto space-y-6">
+      <div class="p-4 sm:p-8 max-w-6xl w-full mx-auto space-y-6">
 
-        <!-- TAB 1: CUSTOMERS -->
-        <section id="section-customers" class="space-y-4">
-          <div class="flex items-center justify-between bg-adminCard p-4 rounded-2xl border border-adminBorder">
-            <div class="text-xs text-zinc-400">
-              Total Customers: <span id="stat-total-users" class="text-white font-bold">0</span>
+        <!-- Metrics Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+          <div class="bg-adminCard border border-adminBorder p-4 rounded-2xl flex items-center justify-between">
+            <div>
+              <p data-i18n="stat_users" class="text-[10px] sm:text-[11px] text-zinc-400 uppercase font-medium">Total Users</p>
+              <h3 id="stat-total-users" class="text-xl sm:text-2xl font-bold text-white mt-0.5">0</h3>
             </div>
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+              <i data-lucide="users" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            </div>
+          </div>
+
+          <div class="bg-adminCard border border-adminBorder p-4 rounded-2xl flex items-center justify-between">
+            <div>
+              <p data-i18n="stat_models" class="text-[10px] sm:text-[11px] text-zinc-400 uppercase font-medium">Active Models</p>
+              <h3 id="stat-active-models" class="text-xl sm:text-2xl font-bold text-white mt-0.5">0</h3>
+            </div>
+            <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
+              <i data-lucide="cpu" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            </div>
+          </div>
+
+          <div class="bg-adminCard border border-adminBorder p-4 rounded-2xl flex items-center justify-between">
+            <div>
+              <p data-i18n="stat_gens" class="text-[10px] sm:text-[11px] text-zinc-400 uppercase font-medium">Generations</p>
+              <h3 id="stat-total-gens" class="text-xl sm:text-2xl font-bold text-white mt-0.5">0</h3>
+            </div>
+            <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
+              <i data-lucide="video" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            </div>
+          </div>
+
+          <div class="bg-adminCard border border-adminBorder p-4 rounded-2xl flex items-center justify-between">
+            <div>
+              <p data-i18n="stat_status" class="text-[10px] sm:text-[11px] text-zinc-400 uppercase font-medium">Database</p>
+              <h3 class="text-xs font-semibold text-emerald-400 mt-1 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Firestore Live</span>
+              </h3>
+            </div>
+            <div class="w-9 h-9 rounded-xl bg-zinc-800 text-zinc-400 flex items-center justify-center">
+              <i data-lucide="database" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= TAB 1: CUSTOMERS ================= -->
+        <section id="section-customers" class="space-y-4">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-adminCard p-4 rounded-2xl border border-adminBorder">
+            <div class="relative flex-1 max-w-sm">
+              <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"></i>
+              <input type="text" id="search-users" data-i18n-ph="search_users_ph" placeholder="Search customer email..." 
+                class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500">
+            </div>
+
             <button onclick="openCreateUserModal()" 
-              class="px-4 py-2 bg-white text-black hover:bg-zinc-200 text-xs font-semibold rounded-xl transition flex items-center space-x-2">
+              class="px-4 py-2 bg-white text-black hover:bg-zinc-200 text-xs font-semibold rounded-xl transition flex items-center justify-center space-x-2">
               <i data-lucide="user-plus" class="w-4 h-4"></i>
-              <span>Add Customer & Assign Google Account</span>
+              <span data-i18n="btn_create_client">Add New Customer</span>
             </button>
           </div>
 
-          <div class="bg-adminCard border border-adminBorder rounded-2xl overflow-hidden shadow-xl">
-            <table class="w-full text-left text-xs">
+          <div class="bg-adminCard border border-adminBorder rounded-2xl overflow-x-auto shadow-xl">
+            <table class="w-full text-left text-xs min-w-[700px]">
               <thead class="bg-[#101013] border-b border-adminBorder text-zinc-400 uppercase tracking-wider font-semibold">
                 <tr>
-                  <th class="py-3.5 px-4">Customer Email</th>
+                  <th class="py-3.5 px-4">Client Email</th>
                   <th class="py-3.5 px-4">Password</th>
-                  <th class="py-3.5 px-4">Dedicated Google Account</th>
+                  <th class="py-3.5 px-4">Assigned Google Account</th>
                   <th class="py-3.5 px-4">Cookie Status</th>
                   <th class="py-3.5 px-4 text-right">Actions</th>
                 </tr>
@@ -156,26 +252,61 @@
           </div>
         </section>
 
-        <!-- TAB 2: MODELS -->
+        <!-- ================= TAB 2: MODELS ================= -->
         <section id="section-models" class="hidden space-y-4">
           <div class="flex items-center justify-between">
-            <p class="text-xs text-zinc-400">Add models available on Google Video/Flow studio</p>
-            <button onclick="openAddModelModal()" class="px-3.5 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-medium rounded-xl border border-zinc-700 flex items-center space-x-2">
+            <p data-i18n="models_desc" class="text-xs text-zinc-400">Only toggled models will be displayed on the client website.</p>
+            <button onclick="openAddModelModal()" 
+              class="px-3.5 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-medium rounded-xl border border-zinc-700 flex items-center space-x-2">
               <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-              <span>Add Model</span>
+              <span data-i18n="btn_add_model">Add Custom Model</span>
             </button>
           </div>
           <div id="models-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </section>
 
-        <!-- TAB 3: LIVE AUTOMATION QUEUE -->
-        <section id="section-tasks" class="hidden space-y-4">
+        <!-- ================= TAB 3: BRANDING ================= -->
+        <section id="section-branding" class="hidden space-y-6">
+          <div class="bg-adminCard border border-adminBorder p-6 rounded-2xl space-y-4 max-w-xl">
+            <h3 data-i18n="branding_heading" class="text-sm font-semibold text-white">White-label Branding Settings</h3>
+
+            <div>
+              <label data-i18n="lbl_site_name" class="block text-xs font-medium text-zinc-400 mb-1">Site Title</label>
+              <input type="text" id="setting-site-name" 
+                class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-zinc-500">
+            </div>
+
+            <div>
+              <label data-i18n="lbl_logo_url" class="block text-xs font-medium text-zinc-400 mb-1">Direct Logo Image URL</label>
+              <input type="url" id="setting-logo-url" 
+                class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-zinc-500"
+                placeholder="https://example.com/logo.png">
+            </div>
+
+            <div>
+              <label data-i18n="lbl_disclaimer" class="block text-xs font-medium text-zinc-400 mb-1">Footer Disclaimer</label>
+              <input type="text" id="setting-disclaimer" 
+                class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-zinc-500">
+            </div>
+
+            <div class="pt-2">
+              <button onclick="saveSiteBranding()" 
+                class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl transition flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4"></i>
+                <span data-i18n="btn_save_changes">Save Changes</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TAB 4: AUDIT LOGS ================= -->
+        <section id="section-logs" class="hidden space-y-4">
           <div class="bg-adminCard border border-adminBorder rounded-2xl p-4">
-            <h3 class="text-xs font-semibold text-white mb-3 flex items-center gap-2">
+            <h3 data-i18n="logs_heading" class="text-xs font-semibold text-white mb-3 flex items-center gap-2">
               <i data-lucide="activity" class="w-4 h-4 text-yellow-400"></i>
-              <span>Real-time Google Automation Tasks</span>
+              <span>Live Video Generation Audit Logs</span>
             </h3>
-            <div id="tasks-container" class="space-y-2 max-h-96 overflow-y-auto pr-2"></div>
+            <div id="logs-container" class="space-y-2 max-h-96 overflow-y-auto pr-2"></div>
           </div>
         </section>
 
@@ -183,56 +314,64 @@
     </main>
   </div>
 
-  <!-- MODAL: CREATE / EDIT CUSTOMER WITH GOOGLE SESSION COOKIES -->
+  <!-- MODAL: ADD / EDIT CUSTOMER (WITH GOOGLE ACCOUNT & COOKIES) -->
   <div id="user-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="w-full max-w-lg bg-adminCard border border-adminBorder p-6 rounded-2xl shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      
       <div class="flex items-center justify-between pb-2 border-b border-adminBorder">
         <h3 class="text-sm font-semibold text-white flex items-center gap-2">
-          <i data-lucide="key" class="w-4 h-4 text-emerald-400"></i>
-          <span>Customer & Google Cookie Configuration</span>
+          <i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i>
+          <span>Configure Client & Google Account</span>
         </h3>
         <button onclick="closeUserModal()" class="text-zinc-500 hover:text-white">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <form id="user-form" class="space-y-3.5">
+      <form id="create-user-form" class="space-y-3.5">
         <input type="hidden" id="modal-user-id">
 
         <div>
-          <label class="block text-xs text-zinc-400 mb-1">Customer Gmail / Email (Login ID)</label>
+          <label class="block text-xs text-zinc-400 mb-1">Customer Gmail / Email</label>
           <input type="email" id="modal-email" required placeholder="client@gmail.com"
             class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-zinc-500">
         </div>
 
         <div>
-          <label class="block text-xs text-zinc-400 mb-1">Login Password</label>
-          <input type="text" id="modal-password" required placeholder="Password"
+          <label class="block text-xs text-zinc-400 mb-1">Password</label>
+          <input type="text" id="modal-password" required placeholder="Temporary password"
             class="w-full bg-[#0a0a0c] border border-adminBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-zinc-500">
         </div>
 
-        <div class="pt-2 border-t border-zinc-800">
-          <label class="block text-xs text-emerald-400 font-semibold mb-1">Dedicated Google Account Name / Label</label>
+        <div>
+          <label class="block text-xs text-emerald-400 font-medium mb-1">Dedicated Google Account Label</label>
           <input type="text" id="modal-google-account" required placeholder="e.g. Account-1: mygooglepro@gmail.com"
             class="w-full bg-[#0a0a0c] border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-          <span class="text-[10px] text-zinc-500">Only this customer will have access to this Google account.</span>
+          <span class="text-[10px] text-zinc-500">Assign a specific Google account only for this user.</span>
         </div>
 
         <div>
-          <label class="block text-xs text-zinc-300 font-medium mb-1">Google Session Cookies (JSON from Cookie-Editor)</label>
-          <textarea id="modal-cookies" rows="5" required placeholder="Paste the exported JSON cookies from your browser here..."
+          <label class="block text-xs text-zinc-300 font-medium mb-1">Google Session Cookies (JSON / Text)</label>
+          <textarea id="modal-cookies" rows="4" placeholder="Paste exported JSON cookies here..."
             class="w-full bg-[#0a0a0c] border border-zinc-700 rounded-xl p-2.5 text-[11px] font-mono text-zinc-300 focus:outline-none focus:border-emerald-500 leading-relaxed"></textarea>
-          <span class="text-[10px] text-zinc-500">Use 'Cookie-Editor' browser extension on labs.google / google.com -> Export -> JSON -> Paste here.</span>
+          <span class="text-[10px] text-zinc-500">Paste session cookies from Cookie-Editor extension.</span>
         </div>
 
         <div class="pt-3 flex items-center justify-end space-x-2">
           <button type="button" onclick="closeUserModal()" class="px-4 py-2 bg-zinc-800 text-zinc-300 text-xs rounded-xl">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-emerald-500 text-black text-xs font-semibold rounded-xl">Save & Bind Account</button>
+          <button type="submit" class="px-4 py-2 bg-emerald-500 text-black text-xs font-semibold rounded-xl">Save Configuration</button>
         </div>
       </form>
     </div>
   </div>
 
+  <!-- TOAST -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-emerald-500 text-black font-semibold text-xs px-4 py-2.5 rounded-xl shadow-2xl transform translate-y-12 opacity-0 transition-all duration-300 flex items-center space-x-2">
+    <i data-lucide="check-circle" class="w-4 h-4"></i>
+    <span id="toast-message">Success!</span>
+  </div>
+
+  <!-- ================= SCRIPTS ================= -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDdtiWw6gzYFqSyuq2-ufFzmJ1PZyL2bCE",
@@ -244,110 +383,268 @@
       measurementId: "G-CT21P2M6XY"
     };
 
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
     const db = firebase.firestore();
 
-    function renderIcons() { if (window.lucide) lucide.createIcons(); }
+    const adminTranslations = {
+      en: {
+        admin_login_title: "Admin Control Center",
+        admin_login_sub: "Manage accounts, dedicated Google profiles & models",
+        admin_email_lbl: "Admin Email",
+        admin_pass_lbl: "Password",
+        btn_enter_dashboard: "Enter Dashboard",
+        tab_users: "Customer Management",
+        tab_models: "AI Model Controls",
+        tab_branding: "Branding & Design",
+        tab_logs: "Audit Logs",
+        btn_open_site: "Open Flow Website",
+        btn_admin_logout: "Admin Logout",
+        stat_users: "Total Users",
+        stat_models: "Active Models",
+        stat_gens: "Generations",
+        stat_status: "Database",
+        search_users_ph: "Search customer email...",
+        btn_create_client: "Add New Customer",
+        models_desc: "Only toggled models will be displayed on the client website.",
+        btn_add_model: "Add Custom Model",
+        branding_heading: "White-label Branding Settings",
+        lbl_site_name: "Site Title",
+        lbl_logo_url: "Direct Logo Image URL",
+        lbl_disclaimer: "Footer Disclaimer",
+        btn_save_changes: "Save Changes",
+        logs_heading: "Live Video Generation Audit Logs"
+      },
+      bn: {
+        admin_login_title: "অ্যাডমিন কন্ট্রোল সেন্টার",
+        admin_login_sub: "গ্রাহক একাউন্ট, পার্সোনাল গুগল প্রোফাইল ও মডেল ম্যানেজমেন্ট",
+        admin_email_lbl: "অ্যাডমিন ইমেইল",
+        admin_pass_lbl: "পাসওয়ার্ড",
+        btn_enter_dashboard: "ড্যাশবোর্ডে প্রবেশ",
+        tab_users: "গ্রাহক ম্যানেজমেন্ট",
+        tab_models: "এআই মডেল কন্ট্রোল",
+        tab_branding: "ব্র্যান্ডিং ও ডিজাইন",
+        tab_logs: "জেনারেশন লগ",
+        btn_open_site: "মেইন ওয়েবসাইট খুলুন",
+        btn_admin_logout: "অ্যাডমিন লগআউট",
+        stat_users: "মোট গ্রাহক",
+        stat_models: "সক্রিয় মডেল",
+        stat_gens: "মোট জেনারেশন",
+        stat_status: "ডাটাবেজ",
+        search_users_ph: "গ্রাহকের ইমেইল খুঁজুন...",
+        btn_create_client: "নতুন গ্রাহক তৈরি করুন",
+        models_desc: "যেসব মডেল সক্রিয় থাকবে সেগুলোই মেইন ওয়েবসাইটের ড্রপডাউনে শো হবে।",
+        btn_add_model: "নতুন মডেল যুক্ত করুন",
+        branding_heading: "সাইটের ব্র্যান্ডিং সেটিংস",
+        lbl_site_name: "ওয়েবসাইটের নাম",
+        lbl_logo_url: "লোগো সরাসরি ছবির লিংক",
+        lbl_disclaimer: "ফুটার ডিসক্লেইমার",
+        btn_save_changes: "পরিবর্তন সংরক্ষণ করুন",
+        logs_heading: "লাইভ ভিডিও জেনারেশন অডিট লগ"
+      }
+    };
+
+    let currentAdminLang = localStorage.getItem('flow_admin_lang') || 'en';
+
+    function setAdminLanguage(lang) {
+      currentAdminLang = lang;
+      localStorage.setItem('flow_admin_lang', lang);
+      document.querySelectorAll('.admin-lang-label').forEach(el => el.textContent = lang === 'en' ? 'BN' : 'EN');
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (adminTranslations[lang][key]) el.textContent = adminTranslations[lang][key];
+      });
+
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.getAttribute('data-i18n-ph');
+        if (adminTranslations[lang][key]) el.placeholder = adminTranslations[lang][key];
+      });
+    }
+
+    function toggleAdminLanguage() {
+      setAdminLanguage(currentAdminLang === 'en' ? 'bn' : 'en');
+    }
+
+    function renderIcons() {
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function toggleAdminPassVisibility() {
+      const pass = document.getElementById('admin-password');
+      const icon = document.getElementById('admin-eye-icon');
+      if (pass.type === 'password') {
+        pass.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        pass.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      renderIcons();
+    }
+
+    const adminSidebar = document.getElementById('admin-sidebar');
+    const adminBackdrop = document.getElementById('admin-mobile-backdrop');
+    function toggleAdminDrawer() {
+      adminSidebar.classList.toggle('-translate-x-full');
+      adminBackdrop.classList.toggle('hidden');
+    }
+    adminBackdrop.addEventListener('click', toggleAdminDrawer);
 
     const adminAuthScreen = document.getElementById('admin-auth-screen');
     const adminMainApp = document.getElementById('admin-main-app');
+    const adminLoginForm = document.getElementById('admin-login-form');
+    const adminLoginError = document.getElementById('admin-login-error');
 
-    // Admin Auth
-    document.getElementById('admin-login-form').addEventListener('submit', (e) => {
+    function checkAdminSession() {
+      if (sessionStorage.getItem('flow_admin_logged') === 'true') {
+        adminAuthScreen.classList.add('hidden');
+        adminMainApp.classList.remove('hidden');
+        startFirestoreListeners();
+      }
+    }
+
+    adminLoginForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('admin-email').value.trim();
       const pass = document.getElementById('admin-password').value;
 
       if (email === 'superadmin@flowstudio.com' && pass === '#Superadmin@tuhin') {
+        sessionStorage.setItem('flow_admin_logged', 'true');
         adminAuthScreen.classList.add('hidden');
         adminMainApp.classList.remove('hidden');
-        startListeners();
+        startFirestoreListeners();
       } else {
-        document.getElementById('admin-login-error').textContent = "Invalid Admin Credentials!";
-        document.getElementById('admin-login-error').classList.remove('hidden');
+        adminLoginError.textContent = "Invalid Admin Credentials!";
+        adminLoginError.classList.remove('hidden');
       }
     });
 
     document.getElementById('admin-logout-btn').addEventListener('click', () => {
+      sessionStorage.removeItem('flow_admin_logged');
       adminMainApp.classList.add('hidden');
       adminAuthScreen.classList.remove('hidden');
     });
 
-    function switchTab(t) {
-      ['customers', 'models', 'tasks'].forEach(x => {
-        document.getElementById(`section-${x}`).classList.add('hidden');
-        document.getElementById(`tab-btn-${x}`).className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-adminHover hover:text-white text-xs font-medium transition";
+    function switchTab(tab) {
+      document.getElementById('section-customers').classList.add('hidden');
+      document.getElementById('section-models').classList.add('hidden');
+      document.getElementById('section-branding').classList.add('hidden');
+      document.getElementById('section-logs').classList.add('hidden');
+
+      ['customers', 'models', 'branding', 'logs'].forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (btn) btn.className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-adminHover hover:text-white text-xs font-medium transition";
       });
-      document.getElementById(`section-${t}`).classList.remove('hidden');
-      document.getElementById(`tab-btn-${t}`).className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-adminActive text-white text-xs font-medium transition";
+
+      document.getElementById(`section-${tab}`).classList.remove('hidden');
+      document.getElementById(`tab-btn-${tab}`).className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-adminActive text-white text-xs font-medium transition";
+      
+      if (window.innerWidth < 768) toggleAdminDrawer();
       renderIcons();
     }
 
     let allUsers = [];
     let allModels = [];
 
-    function startListeners() {
-      // Users
+    function startFirestoreListeners() {
       db.collection('users').onSnapshot(snap => {
         allUsers = [];
-        snap.forEach(d => allUsers.push({ id: d.id, ...d.data() }));
+        snap.forEach(doc => allUsers.push({ id: doc.id, ...doc.data() }));
         document.getElementById('stat-total-users').textContent = allUsers.length;
-        renderUsers();
+        renderUsersTable();
       });
 
-      // Models
       db.collection('models').onSnapshot(snap => {
         allModels = [];
-        snap.forEach(d => allModels.push({ docId: d.id, ...d.data() }));
-        renderModels();
+        let activeCount = 0;
+        snap.forEach(doc => {
+          const data = { docId: doc.id, ...doc.data() };
+          allModels.push(data);
+          if (data.active !== false) activeCount++;
+        });
+        document.getElementById('stat-active-models').textContent = activeCount;
+        renderModelsList();
       });
 
-      // Live Tasks
-      db.collection('video_tasks').orderBy('createdAt', 'desc').limit(20).onSnapshot(snap => {
-        const box = document.getElementById('tasks-container');
+      db.collection('settings').doc('site_config').onSnapshot(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById('setting-site-name').value = data.siteName || '';
+          document.getElementById('setting-logo-url').value = data.logoUrl || '';
+          document.getElementById('setting-disclaimer').value = data.disclaimer || '';
+        }
+      });
+
+      db.collection('video_tasks').onSnapshot(snap => {
+        document.getElementById('stat-total-gens').textContent = snap.size;
+        const box = document.getElementById('logs-container');
         box.innerHTML = '';
         if (snap.empty) {
-          box.innerHTML = `<div class="text-xs text-zinc-500 py-6 text-center">No active tasks in queue.</div>`;
+          box.innerHTML = `<div class="text-xs text-zinc-500 py-6 text-center">No video requests recorded yet.</div>`;
           return;
         }
         snap.forEach(doc => {
-          const t = doc.data();
+          const l = doc.data();
           const item = document.createElement('div');
           item.className = "p-3 rounded-xl bg-zinc-900/60 border border-zinc-800 text-xs flex items-center justify-between";
           item.innerHTML = `
-            <div>
-              <div class="font-medium text-white flex items-center space-x-2">
-                <span>${t.userEmail}</span>
-                <span class="text-[10px] px-2 py-0.5 rounded ${t.status === 'completed' ? 'bg-emerald-950 text-emerald-400' : (t.status === 'processing' ? 'bg-blue-950 text-blue-400' : 'bg-yellow-950 text-yellow-400')} uppercase font-bold">${t.status}</span>
+            <div class="space-y-0.5">
+              <div class="flex items-center space-x-2">
+                <span class="font-semibold text-white">${l.userEmail}</span>
+                <span class="text-[10px] px-1.5 py-0.2 rounded ${l.status === 'completed' ? 'bg-emerald-950 text-emerald-400' : 'bg-blue-950 text-blue-400'} font-mono uppercase">${l.status || 'pending'}</span>
               </div>
-              <p class="text-[11px] text-zinc-400 italic truncate max-w-sm mt-0.5">"${t.prompt}"</p>
+              <p class="text-zinc-400 text-[11px] truncate max-w-xs sm:max-w-md italic">"${l.prompt}"</p>
             </div>
-            <div class="text-[10px] text-zinc-500 font-mono">${t.stage || 'In Queue'}</div>
+            <div class="text-right text-[10px] text-zinc-500 font-mono">
+              <div>${l.googleAccount || 'Dedicated'}</div>
+              <div>${l.stage || ''}</div>
+            </div>
           `;
           box.appendChild(item);
         });
       });
     }
 
-    function renderUsers() {
+    function renderUsersTable(filter = '') {
       const tbody = document.getElementById('users-table-body');
       tbody.innerHTML = '';
-      allUsers.forEach(u => {
-        const hasCookie = u.cookies && u.cookies.length > 20;
+      const filtered = allUsers.filter(u => (u.email || '').toLowerCase().includes(filter.toLowerCase()));
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-zinc-500">No customers found.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(u => {
+        const hasCookies = u.cookies && u.cookies.length > 20;
         const tr = document.createElement('tr');
-        tr.className = "hover:bg-zinc-900/40";
+        tr.className = "hover:bg-zinc-900/40 transition";
         tr.innerHTML = `
-          <td class="py-3 px-4 font-medium text-white">${u.email}</td>
-          <td class="py-3 px-4 font-mono text-zinc-400">${u.password}</td>
-          <td class="py-3 px-4 font-semibold text-emerald-400">${u.googleAccount || 'Not Assigned'}</td>
-          <td class="py-3 px-4">
-            <span class="px-2 py-0.5 rounded text-[10px] ${hasCookie ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-red-950 text-red-400 border border-red-800'}">
-              ${hasCookie ? 'Cookies Loaded' : 'No Cookies'}
+          <td class="py-3.5 px-4 font-medium text-white flex items-center space-x-2">
+            <span class="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] text-zinc-300 uppercase">${(u.email||'U').charAt(0)}</span>
+            <span>${u.email}</span>
+          </td>
+          <td class="py-3.5 px-4 font-mono text-zinc-400">${u.password}</td>
+          <td class="py-3.5 px-4 font-medium text-emerald-400 font-mono">
+            ${u.googleAccount || 'Not Assigned'}
+          </td>
+          <td class="py-3.5 px-4">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${hasCookies ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800' : 'bg-red-950/60 text-red-400 border border-red-800'}">
+              ${hasCookies ? 'Cookies Loaded' : 'No Cookies'}
             </span>
           </td>
-          <td class="py-3 px-4 text-right space-x-2">
-            <button onclick="editUser('${u.id}')" class="p-1 text-zinc-400 hover:text-white"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
-            <button onclick="deleteUser('${u.id}')" class="p-1 text-zinc-400 hover:text-red-400"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+          <td class="py-3.5 px-4 text-right space-x-1.5">
+            <button onclick="openEditModal('${u.id}')" class="p-1.5 text-zinc-400 hover:text-white rounded hover:bg-zinc-800" title="Edit">
+              <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+            </button>
+            <button onclick="toggleUserStatus('${u.id}', ${u.active !== false})" class="p-1.5 text-zinc-400 hover:text-yellow-400 rounded hover:bg-zinc-800" title="Toggle Status">
+              <i data-lucide="power" class="w-3.5 h-3.5"></i>
+            </button>
+            <button onclick="deleteUser('${u.id}')" class="p-1.5 text-zinc-400 hover:text-red-400 rounded hover:bg-zinc-800" title="Delete">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -355,30 +652,29 @@
       renderIcons();
     }
 
+    document.getElementById('search-users').addEventListener('input', (e) => renderUsersTable(e.target.value));
+
     function openCreateUserModal() {
       document.getElementById('modal-user-id').value = '';
-      document.getElementById('user-form').reset();
-      document.getElementById('user-modal').classList.remove('hidden');
-      document.getElementById('user-modal').classList.add('flex');
+      document.getElementById('create-user-form').reset();
+      document.getElementById('user-modal').classList.replace('hidden', 'flex');
     }
     function closeUserModal() {
-      document.getElementById('user-modal').classList.add('hidden');
-      document.getElementById('user-modal').classList.remove('flex');
+      document.getElementById('user-modal').classList.replace('flex', 'hidden');
     }
 
-    function editUser(id) {
-      const u = allUsers.find(x => x.id === id);
+    function openEditModal(userId) {
+      const u = allUsers.find(x => x.id === userId);
       if (!u) return;
       document.getElementById('modal-user-id').value = u.id;
       document.getElementById('modal-email').value = u.email;
       document.getElementById('modal-password').value = u.password;
       document.getElementById('modal-google-account').value = u.googleAccount || '';
       document.getElementById('modal-cookies').value = u.cookies || '';
-      document.getElementById('user-modal').classList.remove('hidden');
-      document.getElementById('user-modal').classList.add('flex');
+      document.getElementById('user-modal').classList.replace('hidden', 'flex');
     }
 
-    document.getElementById('user-form').addEventListener('submit', async (e) => {
+    document.getElementById('create-user-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('modal-user-id').value;
       const data = {
@@ -389,45 +685,113 @@
         active: true
       };
 
-      if (id) {
-        await db.collection('users').doc(id).update(data);
-      } else {
-        await db.collection('users').add({ ...data, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      try {
+        if (id) {
+          await db.collection('users').doc(id).update(data);
+          showToast("Customer updated successfully!");
+        } else {
+          await db.collection('users').add({ ...data, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+          showToast("New customer created with Google profile!");
+        }
+        closeUserModal();
+      } catch (err) {
+        alert("Firestore error: " + err.message);
       }
-      closeUserModal();
     });
 
-    async function deleteUser(id) {
-      if (confirm("Delete this customer?")) await db.collection('users').doc(id).delete();
+    async function toggleUserStatus(userId, currentStatus) {
+      try {
+        await db.collection('users').doc(userId).update({ active: !currentStatus });
+        showToast("Status updated!");
+      } catch(e) { alert(e.message); }
     }
 
-    function renderModels() {
+    async function deleteUser(userId) {
+      if (confirm("Delete customer permanently?")) {
+        try {
+          await db.collection('users').doc(userId).delete();
+          showToast("Customer deleted!");
+        } catch(e) { alert(e.message); }
+      }
+    }
+
+    function renderModelsList() {
       const list = document.getElementById('models-list');
       list.innerHTML = '';
-      allModels.forEach(m => {
-        const d = document.createElement('div');
-        d.className = "p-4 bg-adminCard border border-adminBorder rounded-2xl flex items-center justify-between";
-        d.innerHTML = `
-          <div>
-            <div class="text-xs font-bold text-white">${m.name}</div>
-            <div class="text-[10px] text-zinc-500 font-mono">${m.id}</div>
+      allModels.forEach((m) => {
+        const card = document.createElement('div');
+        card.className = "bg-adminCard border border-adminBorder p-4 rounded-2xl flex items-center justify-between";
+        card.innerHTML = `
+          <div class="space-y-0.5">
+            <span class="text-xs sm:text-sm font-semibold text-white">${m.name}</span>
+            <div class="text-[10px] font-mono text-zinc-500">${m.id}</div>
           </div>
-          <button onclick="deleteModel('${m.docId}')" class="text-zinc-500 hover:text-red-400 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+          <div class="flex items-center space-x-2">
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" ${m.active !== false ? 'checked' : ''} onchange="toggleModel('${m.docId}', ${m.active !== false})" class="sr-only peer">
+              <div class="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+            </label>
+            <button onclick="deleteModel('${m.docId}')" class="text-zinc-500 hover:text-red-400 p-1" title="Delete Model">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
         `;
-        list.appendChild(d);
+        list.appendChild(card);
       });
       renderIcons();
     }
 
-    async function openAddModelModal() {
-      const name = prompt("Model Name (e.g. Google Veo 2 / Flow Video):");
-      if (!name) return;
-      const id = prompt("Model Tag (e.g. google/veo-2):", "google/flow-video");
-      if (!id) return;
-      await db.collection('models').add({ name, id, active: true });
+    async function toggleModel(docId, currentActive) {
+      try {
+        await db.collection('models').doc(docId).update({ active: !currentActive });
+        showToast("Model visibility updated!");
+      } catch(e) { alert(e.message); }
     }
-    async function deleteModel(id) { await db.collection('models').doc(id).delete(); }
 
+    async function deleteModel(docId) {
+      if (confirm("Delete this model permanently?")) {
+        try {
+          await db.collection('models').doc(docId).delete();
+          showToast("Model deleted!");
+        } catch(e) { alert(e.message); }
+      }
+    }
+
+    async function openAddModelModal() {
+      const name = prompt("Model Display Name (যেমন: Google Flow Veo):");
+      if (!name) return;
+      const id = prompt("Model Slug / ID (যেমন: google/flow-video):");
+      if (!id) return;
+      try {
+        await db.collection('models').add({ id: id.trim(), name: name.trim(), active: true });
+        showToast("Model added successfully!");
+      } catch(e) { alert(e.message); }
+    }
+
+    async function saveSiteBranding() {
+      const siteName = document.getElementById('setting-site-name').value.trim() || 'Google Flow';
+      const logoUrl = document.getElementById('setting-logo-url').value.trim();
+      const disclaimer = document.getElementById('setting-disclaimer').value.trim();
+
+      try {
+        await db.collection('settings').doc('site_config').set({ siteName, logoUrl, disclaimer });
+        showToast("Branding saved to Firebase!");
+      } catch(e) { alert(e.message); }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-message').textContent = msg;
+      toast.classList.replace('translate-y-12', 'translate-y-0');
+      toast.classList.replace('opacity-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.replace('translate-y-0', 'translate-y-12');
+        toast.classList.replace('opacity-100', 'opacity-0');
+      }, 3000);
+    }
+
+    setAdminLanguage(currentAdminLang);
+    checkAdminSession();
     renderIcons();
   </script>
 </body>
