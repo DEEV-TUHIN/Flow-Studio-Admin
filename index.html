@@ -2,7 +2,7 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Admin Super Control Center - Flow Studio Ultra</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,17 +16,17 @@
     ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
   </style>
 </head>
-<body class="bg-[#09090b] text-zinc-200 min-h-screen flex flex-col font-sans select-none overflow-hidden">
+<body class="bg-[#09090b] text-zinc-200 min-h-screen flex flex-col font-sans select-none overflow-x-hidden">
 
   <!-- ================= 1. ADMIN LOGIN SCREEN ================= -->
   <div id="admin-auth-screen" class="fixed inset-0 z-50 bg-[#060608] flex items-center justify-center p-4">
-    <div class="w-full max-w-sm bg-[#151519] border border-[#27272f] p-6 sm:p-8 rounded-2xl shadow-2xl flex flex-col items-center">
+    <div class="w-full max-w-sm bg-[#151519] border border-[#27272f] p-6 sm:p-8 rounded-3xl shadow-2xl flex flex-col items-center">
       
       <div class="w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center mb-3 text-white">
         <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
       </div>
-      <h2 class="text-lg font-bold text-white tracking-wide">Admin Control Center</h2>
-      <p class="text-xs text-zinc-400 mb-6 text-center">Superadmin & Moderator Dashboard</p>
+      <h2 class="text-base sm:text-lg font-bold text-white tracking-wide">Admin Control Center</h2>
+      <p class="text-xs text-zinc-400 mb-5 text-center">Superadmin & Moderator Dashboard</p>
 
       <form id="admin-login-form" class="w-full space-y-4">
         <div>
@@ -58,18 +58,44 @@
   </div>
 
   <!-- ================= 2. ADMIN DASHBOARD ================= -->
-  <div id="admin-main-app" class="hidden flex-1 flex w-full h-screen overflow-hidden relative">
+  <div id="admin-main-app" class="hidden flex-1 flex flex-col lg:flex-row w-full h-screen overflow-hidden relative">
     
-    <aside class="w-64 border-r border-[#27272f] bg-[#0f0f13] flex flex-col justify-between p-4 shrink-0">
+    <!-- MOBILE TOP BAR -->
+    <div class="lg:hidden flex items-center justify-between bg-[#0f0f13] border-b border-[#27272f] px-4 py-3 shrink-0 z-30">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+          <i data-lucide="command" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <div class="font-bold text-xs text-white">Flow Studio</div>
+          <div id="admin-role-badge-mob" class="text-[9px] text-emerald-400 font-mono">SUPERADMIN</div>
+        </div>
+      </div>
+
+      <button onclick="toggleMobileSidebar()" class="p-2 text-zinc-400 hover:text-white rounded-xl hover:bg-zinc-800 transition">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- BACKDROP -->
+    <div id="sidebar-backdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="admin-sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-64 border-r border-[#27272f] bg-[#0f0f13] flex flex-col justify-between p-4 shrink-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out">
       <div class="space-y-6">
-        <div class="flex items-center space-x-3 px-2 pt-1">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-            <i data-lucide="command" class="w-4 h-4"></i>
+        <div class="flex items-center justify-between px-2 pt-1">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <i data-lucide="command" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="font-bold text-sm text-white leading-tight">Flow Studio</div>
+              <div id="admin-role-badge" class="text-[10px] text-emerald-400 font-mono">SUPERADMIN</div>
+            </div>
           </div>
-          <div>
-            <div class="font-bold text-sm text-white leading-tight">Flow Studio</div>
-            <div id="admin-role-badge" class="text-[10px] text-emerald-400 font-mono">SUPERADMIN</div>
-          </div>
+          <button onclick="toggleMobileSidebar()" class="lg:hidden p-1 text-zinc-400 hover:text-white">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
         </div>
 
         <nav class="space-y-1">
@@ -118,44 +144,45 @@
       </div>
     </aside>
 
+    <!-- MAIN BODY -->
     <main class="flex-1 flex flex-col h-full bg-[#09090b] overflow-y-auto">
       
-      <header class="h-16 border-b border-[#27272f] px-8 flex items-center justify-between sticky top-0 bg-[#09090b]/80 backdrop-blur z-20">
-        <h1 id="tab-title" class="text-sm font-semibold text-white">Customer & Subscription Management</h1>
-        <div class="flex items-center space-x-2">
+      <header class="h-14 sm:h-16 border-b border-[#27272f] px-4 sm:px-8 flex items-center justify-between sticky top-0 bg-[#09090b]/80 backdrop-blur z-20">
+        <h1 id="tab-title" class="text-xs sm:text-sm font-semibold text-white truncate">Customer & Subscription Management</h1>
+        <div class="flex items-center space-x-2 shrink-0">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-xs text-zinc-400 font-mono">Engine Status: Online</span>
+          <span class="text-[11px] sm:text-xs text-zinc-400 font-mono">Online</span>
         </div>
       </header>
 
-      <div class="p-8 max-w-6xl w-full mx-auto space-y-6">
+      <div class="p-4 sm:p-8 max-w-6xl w-full mx-auto space-y-5 sm:space-y-6">
 
         <!-- ================= TAB 1: CUSTOMERS ================= -->
         <section id="section-customers" class="space-y-4">
-          <div class="flex items-center justify-between gap-3 bg-[#151519] p-4 rounded-2xl border border-[#27272f]">
-            <div class="relative w-72">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#151519] p-3 sm:p-4 rounded-2xl border border-[#27272f]">
+            <div class="relative w-full sm:w-72">
               <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"></i>
               <input type="text" id="search-users" placeholder="Search customer email..." 
-                class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500">
+                class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500">
             </div>
 
             <button onclick="openCreateUserModal()" 
-              class="px-4 py-2 bg-white text-black hover:bg-zinc-200 text-xs font-semibold rounded-xl transition flex items-center space-x-2 shadow-lg">
+              class="px-4 py-2 bg-white text-black hover:bg-zinc-200 text-xs font-semibold rounded-xl transition flex items-center justify-center space-x-2 shadow-lg">
               <i data-lucide="user-plus" class="w-4 h-4"></i>
               <span>Add New Customer</span>
             </button>
           </div>
 
           <div class="bg-[#151519] border border-[#27272f] rounded-2xl overflow-x-auto shadow-xl">
-            <table class="w-full text-left text-xs min-w-[800px]">
+            <table class="w-full text-left text-xs min-w-[650px]">
               <thead class="bg-[#101013] border-b border-[#27272f] text-zinc-400 uppercase tracking-wider font-semibold">
                 <tr>
-                  <th class="py-3.5 px-4">Client</th>
-                  <th class="py-3.5 px-4">Password</th>
-                  <th class="py-3.5 px-4">Assigned Model</th>
-                  <th class="py-3.5 px-4">Expiry Date</th>
-                  <th class="py-3.5 px-4">Validity</th>
-                  <th class="py-3.5 px-4 text-right">Actions</th>
+                  <th class="py-3 px-3 sm:px-4">Client</th>
+                  <th class="py-3 px-3 sm:px-4">Password</th>
+                  <th class="py-3 px-3 sm:px-4">Model</th>
+                  <th class="py-3 px-3 sm:px-4">Expiry</th>
+                  <th class="py-3 px-3 sm:px-4">Validity</th>
+                  <th class="py-3 px-3 sm:px-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody id="users-table-body" class="divide-y divide-[#27272f] text-zinc-300"></tbody>
@@ -164,30 +191,30 @@
         </section>
 
         <!-- ================= TAB 2: SERVER & LIVE HEALTH ================= -->
-        <section id="section-server" class="hidden space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-[#151519] border border-zinc-800 p-5 rounded-2xl space-y-2">
+        <section id="section-server" class="hidden space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            <div class="bg-[#151519] border border-zinc-800 p-4 sm:p-5 rounded-2xl space-y-1.5">
               <div class="text-xs text-zinc-400">Stream Connection</div>
-              <div class="text-emerald-400 font-bold flex items-center gap-1.5 text-sm">
+              <div class="text-emerald-400 font-bold flex items-center gap-1.5 text-xs sm:text-sm">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Cloudflare Quic Active</span>
+                <span>Cloudflare Active</span>
               </div>
             </div>
-            <div class="bg-[#151519] border border-zinc-800 p-5 rounded-2xl space-y-2">
-              <div class="text-xs text-zinc-400">VPS Docker Container</div>
-              <div class="text-white font-bold text-sm">flow-studio (3GB Shm)</div>
+            <div class="bg-[#151519] border border-zinc-800 p-4 sm:p-5 rounded-2xl space-y-1.5">
+              <div class="text-xs text-zinc-400">VPS Container</div>
+              <div class="text-white font-bold text-xs sm:text-sm truncate">flow-studio (3GB Shm)</div>
             </div>
-            <div class="bg-[#151519] border border-zinc-800 p-5 rounded-2xl space-y-2">
-              <div class="text-xs text-zinc-400">One-Click Server Actions</div>
+            <div class="bg-[#151519] border border-zinc-800 p-4 sm:p-5 rounded-2xl space-y-2 sm:col-span-2 lg:col-span-1">
+              <div class="text-xs text-zinc-400">Server Actions</div>
               <button onclick="triggerServerRestart()" class="w-full py-1.5 bg-red-950/60 hover:bg-red-900 border border-red-800 text-red-200 text-xs font-semibold rounded-lg flex items-center justify-center space-x-1.5">
                 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                <span>Restart Docker Stream Engine</span>
+                <span>Restart Docker Engine</span>
               </button>
             </div>
           </div>
 
-          <div class="bg-[#151519] border border-[#27272f] p-6 rounded-2xl space-y-4">
-            <h3 class="text-sm font-semibold text-white flex items-center gap-2">
+          <div class="bg-[#151519] border border-[#27272f] p-4 sm:p-6 rounded-2xl space-y-4">
+            <h3 class="text-xs sm:text-sm font-semibold text-white flex items-center gap-2">
               <i data-lucide="radio" class="w-4 h-4 text-emerald-400"></i>
               <span>Cloudflare Tunnel URL Configuration</span>
             </h3>
@@ -204,58 +231,59 @@
         </section>
 
         <!-- ================= TAB 3: MASTER ULTRA ACCOUNT SWITCHER ================= -->
-        <section id="section-master" class="hidden space-y-6">
-          <div class="bg-[#151519] border border-amber-500/20 p-5 rounded-2xl space-y-4">
+        <section id="section-master" class="hidden space-y-5">
+          <div class="bg-[#151519] border border-amber-500/20 p-4 sm:p-5 rounded-2xl space-y-3.5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
               <div>
-                <h3 class="text-sm font-semibold text-amber-300 flex items-center gap-2">
+                <h3 class="text-xs sm:text-sm font-semibold text-amber-300 flex items-center gap-2">
                   <i data-lucide="shield-alert" class="w-4 h-4"></i>
-                  <span>Admin Privacy Protection (লগইন প্রাইভেসি শিল্ড)</span>
+                  <span>Admin Privacy Protection</span>
                 </h3>
-                <p class="text-xs text-zinc-400 mt-0.5">অ্যাকাউন্ট পরিবর্তনের সময় মেইন ওয়েবসাইটে ক্লায়েন্ট স্ক্রিন ১০০% ব্ল্যাকআউট রাখুন।</p>
+                <p class="text-[11px] sm:text-xs text-zinc-400 mt-0.5">অ্যাকাউন্ট পরিবর্তনের সময় মেইন ওয়েবসাইটে ক্লায়েন্ট স্ক্রিন ১০০% ব্ল্যাকআউট রাখুন।</p>
               </div>
 
               <div class="flex items-center space-x-2">
-                <button id="btn-toggle-privacy" onclick="toggleAdminPrivacy()" class="px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold rounded-xl flex items-center space-x-1.5 transition">
+                <button id="btn-toggle-privacy" onclick="toggleAdminPrivacy()" class="flex-1 sm:flex-none px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition">
                   <i data-lucide="eye-off" class="w-3.5 h-3.5"></i>
                   <span id="privacy-status-text">Enable Privacy Shield</span>
                 </button>
-                <button onclick="finishAdminLogin()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-semibold rounded-xl flex items-center space-x-1.5 transition shadow">
+                <button onclick="finishAdminLogin()" class="flex-1 sm:flex-none px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition shadow">
                   <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                  <span>Complete & Go Live</span>
+                  <span>Go Live</span>
                 </button>
               </div>
             </div>
 
-            <ol class="text-xs text-zinc-300 space-y-1.5 list-decimal list-inside leading-relaxed">
-              <li>অ্যাকাউন্ট লগইন করার আগে <b>"Enable Privacy Shield"</b> চাপুন (মেইন সাইটের লাইভ স্ট্রিম কেটে ব্ল্যাকআউট হয়ে যাবে)।</li>
+            <ol class="text-[11px] sm:text-xs text-zinc-300 space-y-1 list-decimal list-inside leading-relaxed">
+              <li>অ্যাকাউন্ট পরিবর্তনের আগে <b>"Enable Privacy Shield"</b> চাপুন।</li>
               <li>নিচের কনসোলে গুগল অ্যাকাউন্টে লগইন সম্পন্ন করুন।</li>
-              <li>লগইন শেষ হলে <b>"Complete & Go Live"</b> বাটনে চাপুন। মেইন ওয়েবসাইট সাথে সাথে সবার জন্য উন্মুক্ত হয়ে যাবে!</li>
+              <li>কাজ শেষ হলে <b>"Go Live"</b> বাটনে চাপুন।</li>
             </ol>
           </div>
 
-          <div class="bg-[#151519] border border-[#27272f] rounded-2xl p-4 space-y-3">
-            <div class="flex items-center justify-between border-b border-zinc-800 pb-2.5">
-              <span class="text-xs font-semibold text-white">Live Master Account Manager Console</span>
+          <div class="bg-[#151519] border border-[#27272f] rounded-2xl p-3 sm:p-4 space-y-3">
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+              <span class="text-xs font-semibold text-white">Safe 1080p Master Account Manager Console</span>
               <button onclick="reloadAdminMasterFrame()" class="px-2.5 py-1 bg-zinc-800 text-zinc-300 text-xs rounded-lg flex items-center space-x-1">
                 <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
-                <span>Reload Console</span>
+                <span>Reload</span>
               </button>
             </div>
-            <!-- Dynamic 1080p Scaled Container (Never forces aspect-video crush) -->
-            <div class="w-full h-[620px] bg-black rounded-xl overflow-hidden border border-zinc-800">
-              <iframe id="admin-master-frame" src="about:blank" class="w-full h-full border-none" allow="autoplay"></iframe>
+
+            <!-- VIRTUAL 1080p VIEWPORT: REMAINS 1920x1080 INTERNALLY SO SERVER NEVER DOWNSCALES -->
+            <div id="admin-viewport-box" class="w-full h-[420px] sm:h-[520px] lg:h-[620px] bg-black rounded-xl overflow-hidden border border-zinc-800 relative flex items-center justify-center">
+              <iframe id="admin-master-frame" src="about:blank" style="width: 1920px; height: 1080px; transform-origin: top left; border: none; position: absolute; top: 0; left: 0;" allow="autoplay"></iframe>
             </div>
           </div>
         </section>
 
         <!-- ================= TAB 4: MAINTENANCE HUB ================= -->
-        <section id="section-maintenance" class="hidden space-y-6">
-          <div class="bg-[#151519] border border-zinc-800 p-6 rounded-2xl space-y-5 max-w-xl">
-            <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
+        <section id="section-maintenance" class="hidden space-y-5">
+          <div class="bg-[#151519] border border-zinc-800 p-4 sm:p-6 rounded-2xl space-y-4 max-w-xl">
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div>
-                <h3 class="text-sm font-semibold text-white">মেইনটেন্যান্স মোড কন্ট্রোল</h3>
-                <p class="text-xs text-zinc-400">চালু থাকলে গ্রাহক ওয়েবসাইট ঢুকলে পপ-আপ মেসেজ দেখবে এবং অ্যাক্সেস বন্ধ থাকবে।</p>
+                <h3 class="text-xs sm:text-sm font-semibold text-white">মেইনটেন্যান্স মোড</h3>
+                <p class="text-[11px] sm:text-xs text-zinc-400">চালু থাকলে গ্রাহক ওয়েবসাইট ঢুকলে নোটিশ দেখবে।</p>
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" id="maint-toggle" class="sr-only peer">
@@ -264,54 +292,54 @@
             </div>
 
             <div>
-              <label class="block text-xs font-medium text-zinc-400 mb-1">নোটিশ টাইটেল (Title)</label>
+              <label class="block text-xs font-medium text-zinc-400 mb-1">নোটিশ টাইটেল</label>
               <input type="text" id="maint-input-title" value="সার্ভার রক্ষণাবেক্ষণ চলছে" class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none">
             </div>
 
             <div>
-              <label class="block text-xs font-medium text-zinc-400 mb-1">বিস্তারিত বার্তা (Message)</label>
+              <label class="block text-xs font-medium text-zinc-400 mb-1">বিস্তারিত বার্তা</label>
               <textarea id="maint-input-msg" rows="3" class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none">আমরা সিস্টেম আপগ্রেড করছি। খুব দ্রুত আমাদের সেবা পুনরায় চালু হবে।</textarea>
             </div>
 
             <div>
-              <label class="block text-xs font-medium text-zinc-400 mb-1">সম্ভাব্য সময়কাল (Estimated Duration)</label>
+              <label class="block text-xs font-medium text-zinc-400 mb-1">সম্ভাব্য সময়কাল</label>
               <input type="text" id="maint-input-duration" value="আনুমানিক ৩০ মিনিট" class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none">
             </div>
 
-            <button onclick="saveMaintenanceSettings()" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs rounded-xl transition flex items-center space-x-2">
+            <button onclick="saveMaintenanceSettings()" class="w-full sm:w-auto px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs rounded-xl transition flex items-center justify-center space-x-2">
               <i data-lucide="save" class="w-4 h-4"></i>
-              <span>Save Maintenance Settings</span>
+              <span>Save Settings</span>
             </button>
           </div>
         </section>
 
         <!-- ================= TAB 5: AI MODEL CONTROLS ================= -->
         <section id="section-models" class="hidden space-y-4">
-          <div class="flex items-center justify-between">
-            <p class="text-xs text-zinc-400">যেসব মডেল চালু (ON) থাকবে কেবল সেগুলোই ড্রপডাউনে পাওয়া যাবে।</p>
-            <button onclick="openAddModelModal()" class="px-3.5 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium rounded-xl transition flex items-center space-x-2 shadow">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <p class="text-xs text-zinc-400">অনুমোদিত মডেলগুলো ড্রপডাউনে পাওয়া যাবে।</p>
+            <button onclick="openAddModelModal()" class="px-3.5 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium rounded-xl transition flex items-center justify-center space-x-2 shadow">
               <i data-lucide="plus" class="w-3.5 h-3.5"></i>
               <span>Add Custom Model</span>
             </button>
           </div>
-          <div id="models-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          <div id="models-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
         </section>
 
         <!-- ================= TAB 6: MODERATOR ADMINS ================= -->
         <section id="section-team" class="hidden space-y-4">
-          <div class="flex items-center justify-between bg-[#151519] p-4 rounded-2xl border border-zinc-800">
-            <span class="text-xs text-zinc-400">সহকারী মডারেটর অ্যাডমিন যুক্ত করুন যারা ক্লায়েন্ট অ্যাকাউন্ট ম্যানেজ করতে পারবে।</span>
-            <button onclick="openAddModeratorModal()" class="px-4 py-2 bg-pink-600 hover:bg-pink-500 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-2 shadow">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-[#151519] p-3 sm:p-4 rounded-2xl border border-zinc-800">
+            <span class="text-xs text-zinc-400">সহকারী মডারেটর অ্যাডমিন যুক্ত করুন।</span>
+            <button onclick="openAddModeratorModal()" class="px-4 py-2 bg-pink-600 hover:bg-pink-500 text-white text-xs font-semibold rounded-xl transition flex items-center justify-center space-x-2 shadow">
               <i data-lucide="user-plus" class="w-4 h-4"></i>
               <span>Create Moderator</span>
             </button>
           </div>
 
-          <div class="bg-[#151519] border border-zinc-800 rounded-2xl overflow-hidden">
-            <table class="w-full text-left text-xs">
+          <div class="bg-[#151519] border border-zinc-800 rounded-2xl overflow-x-auto">
+            <table class="w-full text-left text-xs min-w-[500px]">
               <thead class="bg-[#101013] border-b border-zinc-800 text-zinc-400 uppercase font-semibold">
                 <tr>
-                  <th class="py-3 px-4">Moderator Email</th>
+                  <th class="py-3 px-4">Email</th>
                   <th class="py-3 px-4">Password</th>
                   <th class="py-3 px-4">Role</th>
                   <th class="py-3 px-4 text-right">Actions</th>
@@ -323,18 +351,18 @@
         </section>
 
         <!-- ================= TAB 7: BRANDING ================= -->
-        <section id="section-branding" class="hidden space-y-6">
-          <div class="bg-[#151519] border border-[#27272f] p-6 rounded-2xl space-y-4 max-w-xl">
-            <h3 class="text-sm font-semibold text-white">Branding & Floating Dock Customization</h3>
+        <section id="section-branding" class="hidden space-y-5">
+          <div class="bg-[#151519] border border-[#27272f] p-4 sm:p-6 rounded-2xl space-y-4 max-w-xl">
+            <h3 class="text-xs sm:text-sm font-semibold text-white">Branding & Floating Dock Customization</h3>
             <div>
               <label class="block text-xs font-medium text-zinc-400 mb-1">Website Title</label>
               <input type="text" id="setting-site-name" class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none">
             </div>
             <div>
-              <label class="block text-xs font-medium text-emerald-400 mb-1">Floating Dock Logo Direct Link (PNG / URL)</label>
+              <label class="block text-xs font-medium text-emerald-400 mb-1">Floating Dock Logo Link (PNG / URL)</label>
               <input type="url" id="setting-dock-logo" class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none font-mono">
             </div>
-            <button onclick="saveSiteBranding()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl transition flex items-center space-x-2">
+            <button onclick="saveSiteBranding()" class="w-full sm:w-auto px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl transition flex items-center justify-center space-x-2">
               <i data-lucide="check" class="w-4 h-4"></i>
               <span>Save Branding</span>
             </button>
@@ -347,13 +375,13 @@
 
   <!-- MODAL: ADD / EDIT CUSTOMER -->
   <div id="user-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="w-full max-w-md bg-[#151519] border border-[#27272f] p-6 rounded-2xl shadow-2xl space-y-4">
+    <div class="w-full max-w-sm sm:max-w-md bg-[#151519] border border-[#27272f] p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between pb-2 border-b border-zinc-800">
         <h3 id="modal-title" class="text-sm font-semibold text-white">Configure Customer</h3>
         <button onclick="closeUserModal()" class="text-zinc-500 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
 
-      <form id="create-user-form" class="space-y-3.5">
+      <form id="create-user-form" class="space-y-3">
         <input type="hidden" id="modal-user-id">
         <div>
           <label class="block text-xs text-zinc-400 mb-1">Email</label>
@@ -379,7 +407,7 @@
           <label class="block text-xs text-zinc-400 mb-1">Credits</label>
           <input type="number" id="modal-credits" value="5000" class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
         </div>
-        <div class="pt-3 flex justify-end space-x-2">
+        <div class="pt-2 flex justify-end space-x-2">
           <button type="button" onclick="closeUserModal()" class="px-4 py-2 bg-zinc-800 text-zinc-300 text-xs rounded-xl">Cancel</button>
           <button type="submit" class="px-4 py-2 bg-emerald-500 text-black text-xs font-semibold rounded-xl">Save</button>
         </div>
@@ -420,6 +448,19 @@
       renderIcons();
     }
 
+    function toggleMobileSidebar() {
+      const sb = document.getElementById('admin-sidebar');
+      const bd = document.getElementById('sidebar-backdrop');
+      const isClosed = sb.classList.contains('-translate-x-full');
+      if (isClosed) {
+        sb.classList.remove('-translate-x-full');
+        bd.classList.remove('hidden');
+      } else {
+        sb.classList.add('-translate-x-full');
+        bd.classList.add('hidden');
+      }
+    }
+
     const adminAuth = document.getElementById('admin-auth-screen');
     const adminMain = document.getElementById('admin-main-app');
 
@@ -429,6 +470,7 @@
         adminAuth.classList.add('hidden');
         adminMain.classList.remove('hidden');
         document.getElementById('admin-role-badge').textContent = role.toUpperCase();
+        document.getElementById('admin-role-badge-mob').textContent = role.toUpperCase();
         startAdminSync();
       }
     }
@@ -466,6 +508,22 @@
 
     let currentStreamUrl = 'http://15.235.246.137:3000';
 
+    // AUTO-SCALES 1080P CONSOLE INTO ADMIN BOX WITHOUT SHRINKING SERVER RESOLUTION
+    function fitAdminViewport() {
+      const box = document.getElementById('admin-viewport-box');
+      const frame = document.getElementById('admin-master-frame');
+      if (!box || !frame) return;
+
+      const scaleX = box.clientWidth / 1920;
+      const scaleY = box.clientHeight / 1080;
+      const scale = Math.min(scaleX, scaleY);
+
+      frame.style.transform = `scale(${scale})`;
+      frame.style.left = `${(box.clientWidth - 1920 * scale) / 2}px`;
+      frame.style.top = `${(box.clientHeight - 1080 * scale) / 2}px`;
+    }
+    window.addEventListener('resize', fitAdminViewport);
+
     function switchTab(t) {
       ['customers', 'server', 'master', 'maintenance', 'models', 'team', 'branding'].forEach(tab => {
         const sec = document.getElementById(`section-${tab}`);
@@ -478,10 +536,18 @@
         }
       });
 
-      // SAFE CONSOLE MANAGEMENT: Only connect stream when admin is on master tab!
+      const sb = document.getElementById('admin-sidebar');
+      const bd = document.getElementById('sidebar-backdrop');
+      if (window.innerWidth < 1024) {
+        sb.classList.add('-translate-x-full');
+        bd.classList.add('hidden');
+      }
+
       const masterFrame = document.getElementById('admin-master-frame');
       if (t === 'master') {
-        masterFrame.src = currentStreamUrl + '/?autoconnect=1&resize=scale&quality=6&cursor=local&clipboard=0&kasm_clipboard=0&control_bar=0';
+        const cleanUrl = currentStreamUrl.split('?')[0].replace(/\/+$/, '');
+        masterFrame.src = `${cleanUrl}/?autoconnect=1&resize=scale&quality=6&cursor=local&clipboard=0&kasm_clipboard=0&control_bar=0`;
+        setTimeout(fitAdminViewport, 200);
       } else {
         masterFrame.src = 'about:blank';
       }
@@ -526,7 +592,6 @@
         }
       });
 
-      // SINGLE TRUTH SOURCE FOR PRIVACY SHIELD
       db.collection('settings').doc('admin_privacy').onSnapshot(doc => {
         if (doc.exists && typeof doc.data().active !== 'undefined') {
           isPrivacyOn = doc.data().active === true;
@@ -549,22 +614,21 @@
       const txt = document.getElementById('privacy-status-text');
       const btn = document.getElementById('btn-toggle-privacy');
       if (active) {
-        txt.textContent = "Privacy Shield ACTIVE (Client Screen Blacked Out)";
-        btn.className = "px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/40 text-xs font-semibold rounded-xl flex items-center space-x-1.5 transition";
+        txt.textContent = "Privacy ACTIVE";
+        btn.className = "flex-1 sm:flex-none px-3.5 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/40 text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition";
       } else {
         txt.textContent = "Enable Privacy Shield";
-        btn.className = "px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold rounded-xl flex items-center space-x-1.5 transition";
+        btn.className = "flex-1 sm:flex-none px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition";
       }
     }
 
-    // REAL-TIME INSTANT PRIVACY TOGGLE
     async function toggleAdminPrivacy() {
       try {
         const newState = !isPrivacyOn;
         isPrivacyOn = newState;
         updatePrivacyUI(newState);
         await db.collection('settings').doc('admin_privacy').set({ active: newState, time: Date.now() });
-        showToast(newState ? "প্রাইভেসি শিল্ড সক্রিয় (মেইন সাইট ব্ল্যাকআউট)" : "প্রাইভেসি শিল্ড নিষ্ক্রিয় হয়েছে");
+        showToast(newState ? "প্রাইভেসি শিল্ড সক্রিয় (ব্ল্যাকআউট)" : "প্রাইভেসি শিল্ড নিষ্ক্রিয় হয়েছে");
       } catch (err) {
         showToast("ত্রুটি: " + err.message);
       }
@@ -575,7 +639,7 @@
         isPrivacyOn = false;
         updatePrivacyUI(false);
         await db.collection('settings').doc('admin_privacy').set({ active: false, time: Date.now() });
-        showToast("Ultra Account Published Live to All Clients!");
+        showToast("Ultra Account Published Live!");
       } catch (err) {
         showToast("ত্রুটি: " + err.message);
       }
@@ -612,16 +676,16 @@
         const tr = document.createElement('tr');
         tr.className = "hover:bg-zinc-900/40 transition";
         tr.innerHTML = `
-          <td class="py-3 px-4 font-medium text-white">${u.email}</td>
-          <td class="py-3 px-4 font-mono text-zinc-400">${u.password}</td>
-          <td class="py-3 px-4 text-purple-400 font-medium">${u.assignedModel || 'Veo 3.1 - Lite'}</td>
-          <td class="py-3 px-4 font-mono text-zinc-300">${u.expiryDate || 'N/A'}</td>
-          <td class="py-3 px-4">
+          <td class="py-3 px-3 sm:px-4 font-medium text-white">${u.email}</td>
+          <td class="py-3 px-3 sm:px-4 font-mono text-zinc-400">${u.password}</td>
+          <td class="py-3 px-3 sm:px-4 text-purple-400 font-medium">${u.assignedModel || 'Veo 3.1 - Lite'}</td>
+          <td class="py-3 px-3 sm:px-4 font-mono text-zinc-300">${u.expiryDate || 'N/A'}</td>
+          <td class="py-3 px-3 sm:px-4">
             <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${isExpired ? 'bg-red-950 text-red-400 border border-red-900' : 'bg-emerald-950 text-emerald-400 border border-emerald-900'}">
               ${text}
             </span>
           </td>
-          <td class="py-3 px-4 text-right space-x-1.5">
+          <td class="py-3 px-3 sm:px-4 text-right space-x-1 sm:space-x-1.5 whitespace-nowrap">
             <button onclick="openEditModal('${u.id}')" class="p-1.5 text-zinc-400 hover:text-white" title="Edit"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
             <button onclick="resetCustomerSession('${u.id}')" class="p-1.5 text-zinc-400 hover:text-cyan-400" title="Reset Session"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i></button>
             <button onclick="toggleUser('${u.id}', ${u.active !== false})" class="p-1.5 text-zinc-400 hover:text-yellow-400" title="Toggle Status"><i data-lucide="power" class="w-3.5 h-3.5"></i></button>
@@ -701,7 +765,7 @@
       }
     }
     function resetCustomerSession(uid) {
-      showToast("Customer session reset signal sent!");
+      showToast("Session reset signal sent!");
     }
 
     async function saveStreamSettings() {
@@ -713,7 +777,9 @@
 
     function reloadAdminMasterFrame() {
       const masterFrame = document.getElementById('admin-master-frame');
-      masterFrame.src = currentStreamUrl + '/?autoconnect=1&resize=scale&quality=6&cursor=local&clipboard=0&kasm_clipboard=0&control_bar=0&t=' + Date.now();
+      const cleanUrl = currentStreamUrl.split('?')[0].replace(/\/+$/, '');
+      masterFrame.src = `${cleanUrl}/?autoconnect=1&resize=scale&quality=6&cursor=local&clipboard=0&kasm_clipboard=0&control_bar=0&t=${Date.now()}`;
+      setTimeout(fitAdminViewport, 200);
     }
 
     function triggerServerRestart() {
