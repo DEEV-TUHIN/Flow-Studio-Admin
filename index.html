@@ -21,7 +21,6 @@
   <!-- ================= 1. ADMIN LOGIN SCREEN ================= -->
   <div id="admin-auth-screen" class="fixed inset-0 z-50 bg-[#060608] flex items-center justify-center p-4">
     <div class="w-full max-w-sm bg-[#151519] border border-[#27272f] p-6 sm:p-8 rounded-3xl shadow-2xl flex flex-col items-center">
-      
       <div class="w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center mb-3 text-white">
         <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
       </div>
@@ -31,7 +30,7 @@
       <form id="admin-login-form" class="w-full space-y-4">
         <div>
           <label class="block text-xs font-medium text-zinc-400 mb-1">Email</label>
-          <input type="email" id="admin-email" required placeholder="admin@flowstudio.com"
+          <input type="email" id="admin-email" required placeholder="superadmin@flowstudio.com"
             class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-zinc-500">
         </div>
 
@@ -46,10 +45,10 @@
           </div>
         </div>
 
-        <div id="admin-login-error" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/50 p-2.5 rounded-lg text-center"></div>
+        <div id="admin-login-error" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-900/50 p-2.5 rounded-lg text-center leading-relaxed"></div>
 
         <button type="submit"
-          class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-sm rounded-xl transition flex items-center justify-center space-x-2">
+          class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-sm rounded-xl transition flex items-center justify-center space-x-2 shadow-lg">
           <span>Enter Dashboard</span>
           <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </button>
@@ -60,7 +59,6 @@
   <!-- ================= 2. ADMIN DASHBOARD ================= -->
   <div id="admin-main-app" class="hidden flex-1 flex flex-col lg:flex-row w-full h-screen overflow-hidden relative">
     
-    <!-- MOBILE TOP BAR -->
     <div class="lg:hidden flex items-center justify-between bg-[#0f0f13] border-b border-[#27272f] px-4 py-3 shrink-0 z-30">
       <div class="flex items-center space-x-2.5">
         <div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
@@ -71,16 +69,13 @@
           <div id="admin-role-badge-mob" class="text-[9px] text-emerald-400 font-mono">SUPERADMIN</div>
         </div>
       </div>
-
       <button onclick="toggleMobileSidebar()" class="p-2 text-zinc-400 hover:text-white rounded-xl hover:bg-zinc-800 transition">
         <i data-lucide="menu" class="w-5 h-5"></i>
       </button>
     </div>
 
-    <!-- BACKDROP -->
     <div id="sidebar-backdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity"></div>
 
-    <!-- SIDEBAR -->
     <aside id="admin-sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-64 border-r border-[#27272f] bg-[#0f0f13] flex flex-col justify-between p-4 shrink-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out">
       <div class="space-y-6">
         <div class="flex items-center justify-between px-2 pt-1">
@@ -99,19 +94,19 @@
         </div>
 
         <nav class="space-y-1">
-          <button onclick="switchTab('customers')" id="tab-btn-customers" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-[#2a2a34] text-white text-xs font-medium transition">
+          <button onclick="switchTab('monitors')" id="tab-btn-monitors" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-[#2a2a34] text-white text-xs font-medium transition">
+            <i data-lucide="monitor" class="w-4 h-4 text-amber-400"></i>
+            <span>3-Monitor URL Hub</span>
+          </button>
+
+          <button onclick="switchTab('customers')" id="tab-btn-customers" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] hover:text-white text-xs font-medium transition">
             <i data-lucide="users" class="w-4 h-4 text-emerald-400"></i>
             <span>Customer & Validity</span>
           </button>
 
-          <button onclick="switchTab('server')" id="tab-btn-server" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] hover:text-white text-xs font-medium transition">
-            <i data-lucide="server" class="w-4 h-4 text-cyan-400"></i>
-            <span>Server & Live Health</span>
-          </button>
-
-          <button onclick="switchTab('master')" id="tab-btn-master" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] hover:text-white text-xs font-medium transition">
-            <i data-lucide="refresh-cw" class="w-4 h-4 text-amber-400"></i>
-            <span>Ultra Account Switcher</span>
+          <button onclick="switchTab('slots')" id="tab-btn-slots" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] hover:text-white text-xs font-medium transition">
+            <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
+            <span>Live 3-Slots Status</span>
           </button>
 
           <button onclick="switchTab('maintenance')" id="tab-btn-maintenance" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] hover:text-white text-xs font-medium transition">
@@ -144,21 +139,131 @@
       </div>
     </aside>
 
-    <!-- MAIN BODY -->
     <main class="flex-1 flex flex-col h-full bg-[#09090b] overflow-y-auto">
       
       <header class="h-14 sm:h-16 border-b border-[#27272f] px-4 sm:px-8 flex items-center justify-between sticky top-0 bg-[#09090b]/80 backdrop-blur z-20">
-        <h1 id="tab-title" class="text-xs sm:text-sm font-semibold text-white truncate">Customer & Subscription Management</h1>
+        <h1 id="tab-title" class="text-xs sm:text-sm font-semibold text-white truncate">3-Monitor Independent URL Hub</h1>
         <div class="flex items-center space-x-2 shrink-0">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-[11px] sm:text-xs text-zinc-400 font-mono">Online</span>
+          <span class="text-[11px] sm:text-xs text-zinc-400 font-mono">3 Monitors Live</span>
         </div>
       </header>
 
       <div class="p-4 sm:p-8 max-w-6xl w-full mx-auto space-y-5 sm:space-y-6">
 
-        <!-- ================= TAB 1: CUSTOMERS ================= -->
-        <section id="section-customers" class="space-y-4">
+        <!-- ================= TAB: 3-MONITOR URL HUB ================= -->
+        <section id="section-monitors" class="space-y-5">
+          
+          <div class="bg-[#151519] border border-amber-500/20 p-4 sm:p-5 rounded-2xl space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
+              <div>
+                <h3 class="text-xs sm:text-sm font-bold text-amber-300 flex items-center gap-2">
+                  <i data-lucide="monitor" class="w-4 h-4"></i>
+                  <span>৩টি মনিটরের স্বতন্ত্র লাইভ লিঙ্ক ও গুগল অ্যাকাউন্ট</span>
+                </h3>
+                <p class="text-[11px] sm:text-xs text-zinc-400 mt-0.5">প্রতিটি মনিটরে নিজস্ব গুগল অ্যাকাউন্ট লগইন/লগআউট করতে "Open Window" বাটনে চাপুন।</p>
+              </div>
+
+              <div class="flex items-center space-x-2">
+                <button id="btn-toggle-privacy" onclick="toggleAdminPrivacy()" class="px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition">
+                  <i data-lucide="eye-off" class="w-3.5 h-3.5"></i>
+                  <span id="privacy-status-text">Enable Privacy Shield</span>
+                </button>
+                <button onclick="finishAdminLogin()" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition shadow">
+                  <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                  <span>Publish Live</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 3 MONITOR URL INPUT / VIEW BOXES -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+              
+              <!-- MONITOR 1 -->
+              <div class="bg-black/60 p-3.5 rounded-xl border border-blue-500/40 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-blue-400">Monitor 1 URL (Port 3001)</span>
+                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
+                </div>
+                <input type="text" id="mon-url-1" placeholder="https://xxxx.trycloudflare.com" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
+                <div class="flex gap-1.5 pt-1">
+                  <button onclick="openMonitorWindow(1)" class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    <span>Open Window</span>
+                  </button>
+                  <button onclick="viewMonitorInPanel(1)" class="px-2.5 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg transition">
+                    View
+                  </button>
+                </div>
+              </div>
+
+              <!-- MONITOR 2 -->
+              <div class="bg-black/60 p-3.5 rounded-xl border border-purple-500/40 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-purple-400">Monitor 2 URL (Port 3002)</span>
+                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
+                </div>
+                <input type="text" id="mon-url-2" placeholder="https://xxxx.trycloudflare.com" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
+                <div class="flex gap-1.5 pt-1">
+                  <button onclick="openMonitorWindow(2)" class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    <span>Open Window</span>
+                  </button>
+                  <button onclick="viewMonitorInPanel(2)" class="px-2.5 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg transition">
+                    View
+                  </button>
+                </div>
+              </div>
+
+              <!-- MONITOR 3 -->
+              <div class="bg-black/60 p-3.5 rounded-xl border border-pink-500/40 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-pink-400">Monitor 3 URL (Port 3003)</span>
+                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
+                </div>
+                <input type="text" id="mon-url-3" placeholder="https://xxxx.trycloudflare.com" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
+                <div class="flex gap-1.5 pt-1">
+                  <button onclick="openMonitorWindow(3)" class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    <span>Open Window</span>
+                  </button>
+                  <button onclick="viewMonitorInPanel(3)" class="px-2.5 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg transition">
+                    View
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="flex justify-end">
+              <button onclick="saveManualUrls()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl flex items-center space-x-1.5 transition shadow">
+                <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                <span>Save URLs to Database</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- IN-PANEL VIEWPORT -->
+          <div class="bg-[#151519] border border-[#27272f] rounded-2xl p-3 sm:p-4 space-y-3">
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+              <span id="active-panel-monitor-title" class="text-xs font-semibold text-white">Live Display: Monitor 1</span>
+              <button onclick="reloadAdminMasterFrame()" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg flex items-center space-x-1">
+                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+                <span>Reload</span>
+              </button>
+            </div>
+
+            <div id="admin-viewport-box" class="w-full h-[450px] sm:h-[550px] lg:h-[650px] bg-black rounded-xl overflow-hidden border border-zinc-800 relative flex items-center justify-center">
+              <iframe id="admin-master-frame" src="about:blank" 
+                style="width: 1920px; height: 1080px; transform-origin: top left; border: none; position: absolute; top: 0; left: 0;" 
+                allow="clipboard-read; clipboard-write; autoplay"></iframe>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================= TAB: CUSTOMERS ================= -->
+        <section id="section-customers" class="hidden space-y-4">
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#151519] p-3 sm:p-4 rounded-2xl border border-[#27272f]">
             <div class="relative w-full sm:w-72">
               <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"></i>
@@ -190,100 +295,43 @@
           </div>
         </section>
 
-        <!-- ================= TAB 2: SERVER & LIVE HEALTH ================= -->
-        <section id="section-server" class="hidden space-y-5">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            <div class="bg-[#151519] border border-zinc-800 p-4 sm:p-5 rounded-2xl space-y-1.5">
-              <div class="text-xs text-zinc-400">Stream Connection</div>
-              <div class="text-emerald-400 font-bold flex items-center gap-1.5 text-xs sm:text-sm">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Cloudflare Active</span>
-              </div>
+        <!-- ================= TAB: LIVE 3-SLOTS STATUS ================= -->
+        <section id="section-slots" class="hidden space-y-5">
+          <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+            <div>
+              <h2 class="text-sm font-bold text-white">Live Client Slots Status (1 - 3)</h2>
+              <p class="text-xs text-zinc-400">গ্রাহকরা ৩টি স্বাধীন স্লটে ভাগ হয়ে ভিডিও তৈরি করছেন</p>
             </div>
-            <div class="bg-[#151519] border border-zinc-800 p-4 sm:p-5 rounded-2xl space-y-1.5">
-              <div class="text-xs text-zinc-400">VPS Container</div>
-              <div class="text-white font-bold text-xs sm:text-sm truncate">flow-studio (3GB Shm)</div>
-            </div>
-            <div class="bg-[#151519] border border-zinc-800 p-4 sm:p-5 rounded-2xl space-y-2 sm:col-span-2 lg:col-span-1">
-              <div class="text-xs text-zinc-400">Server Actions</div>
-              <button onclick="triggerServerRestart()" class="w-full py-1.5 bg-red-950/60 hover:bg-red-900 border border-red-800 text-red-200 text-xs font-semibold rounded-lg flex items-center justify-center space-x-1.5">
-                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                <span>Restart Docker Engine</span>
-              </button>
-            </div>
+            <button onclick="initOrReset3Slots()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded-xl flex items-center space-x-1.5 transition">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              <span>Reset 3 Slots Status</span>
+            </button>
           </div>
 
-          <div class="bg-[#151519] border border-[#27272f] p-4 sm:p-6 rounded-2xl space-y-4">
-            <h3 class="text-xs sm:text-sm font-semibold text-white flex items-center gap-2">
-              <i data-lucide="radio" class="w-4 h-4 text-emerald-400"></i>
-              <span>Cloudflare Tunnel URL Configuration</span>
-            </h3>
+          <div id="slots-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
 
-            <div class="flex flex-col sm:flex-row gap-2 max-w-3xl">
-              <input type="url" id="setting-stream-url" placeholder="https://xxxx-xxxx.trycloudflare.com"
-                class="flex-1 bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
-              <button onclick="saveStreamSettings()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl transition flex items-center justify-center space-x-1.5 shadow">
-                <i data-lucide="check" class="w-4 h-4"></i>
-                <span>Save Stream URL</span>
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <!-- ================= TAB 3: MASTER ULTRA ACCOUNT SWITCHER ================= -->
-        <section id="section-master" class="hidden space-y-5">
-          <div class="bg-[#151519] border border-amber-500/20 p-4 sm:p-5 rounded-2xl space-y-3.5">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
-              <div>
-                <h3 class="text-xs sm:text-sm font-semibold text-amber-300 flex items-center gap-2">
-                  <i data-lucide="shield-alert" class="w-4 h-4"></i>
-                  <span>Admin Privacy Protection</span>
-                </h3>
-                <p class="text-[11px] sm:text-xs text-zinc-400 mt-0.5">অ্যাকাউন্ট পরিবর্তনের সময় মেইন ওয়েবসাইটে ক্লায়েন্ট স্ক্রিন ১০০% ব্ল্যাকআউট রাখুন।</p>
-              </div>
-
+          <div class="bg-[#151519] border border-zinc-800 p-4 sm:p-5 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
               <div class="flex items-center space-x-2">
-                <button id="btn-toggle-privacy" onclick="toggleAdminPrivacy()" class="flex-1 sm:flex-none px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition">
-                  <i data-lucide="eye-off" class="w-3.5 h-3.5"></i>
-                  <span id="privacy-status-text">Enable Privacy Shield</span>
-                </button>
-                <button onclick="finishAdminLogin()" class="flex-1 sm:flex-none px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition shadow">
-                  <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                  <span>Go Live</span>
-                </button>
+                <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+                <h3 class="text-xs sm:text-sm font-semibold text-white">Live Waiting Queue</h3>
               </div>
+              <span id="queue-count-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/10 text-amber-300 border border-amber-500/20">0 Waiting</span>
             </div>
 
-            <ol class="text-[11px] sm:text-xs text-zinc-300 space-y-1 list-decimal list-inside leading-relaxed">
-              <li>অ্যাকাউন্ট পরিবর্তনের আগে <b>"Enable Privacy Shield"</b> চাপুন।</li>
-              <li>নিচের কনসোলে গুগল অ্যাকাউন্টে লগইন সম্পন্ন করুন।</li>
-              <li>কাজ শেষ হলে <b>"Go Live"</b> বাটনে চাপুন।</li>
-            </ol>
-          </div>
-
-          <div class="bg-[#151519] border border-[#27272f] rounded-2xl p-3 sm:p-4 space-y-3">
-            <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
-              <span class="text-xs font-semibold text-white">Safe 1080p Master Account Manager Console</span>
-              <button onclick="reloadAdminMasterFrame()" class="px-2.5 py-1 bg-zinc-800 text-zinc-300 text-xs rounded-lg flex items-center space-x-1">
-                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
-                <span>Reload</span>
-              </button>
-            </div>
-
-            <!-- VIRTUAL 1080p VIEWPORT: REMAINS 1920x1080 INTERNALLY SO SERVER NEVER DOWNSCALES -->
-            <div id="admin-viewport-box" class="w-full h-[420px] sm:h-[520px] lg:h-[620px] bg-black rounded-xl overflow-hidden border border-zinc-800 relative flex items-center justify-center">
-              <iframe id="admin-master-frame" src="about:blank" style="width: 1920px; height: 1080px; transform-origin: top left; border: none; position: absolute; top: 0; left: 0;" allow="autoplay"></iframe>
+            <div id="queue-list" class="space-y-2 text-xs">
+              <div class="p-3 text-center text-zinc-500">কোনো গ্রাহক সিরিয়ালে অপেক্ষমাণ নেই।</div>
             </div>
           </div>
         </section>
 
-        <!-- ================= TAB 4: MAINTENANCE HUB ================= -->
+        <!-- ================= TAB: MAINTENANCE ================= -->
         <section id="section-maintenance" class="hidden space-y-5">
           <div class="bg-[#151519] border border-zinc-800 p-4 sm:p-6 rounded-2xl space-y-4 max-w-xl">
             <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div>
                 <h3 class="text-xs sm:text-sm font-semibold text-white">মেইনটেন্যান্স মোড</h3>
-                <p class="text-[11px] sm:text-xs text-zinc-400">চালু থাকলে গ্রাহক ওয়েবসাইট ঢুকলে নোটিশ দেখবে।</p>
+                <p class="text-[11px] sm:text-xs text-zinc-400">চালু থাকলে গ্রাহক ঢুকলে নোটিশ দেখবে।</p>
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" id="maint-toggle" class="sr-only peer">
@@ -298,12 +346,7 @@
 
             <div>
               <label class="block text-xs font-medium text-zinc-400 mb-1">বিস্তারিত বার্তা</label>
-              <textarea id="maint-input-msg" rows="3" class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none">আমরা সিস্টেম আপগ্রেড করছি। খুব দ্রুত আমাদের সেবা পুনরায় চালু হবে।</textarea>
-            </div>
-
-            <div>
-              <label class="block text-xs font-medium text-zinc-400 mb-1">সম্ভাব্য সময়কাল</label>
-              <input type="text" id="maint-input-duration" value="আনুমানিক ৩০ মিনিট" class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none">
+              <textarea id="maint-input-msg" rows="3" class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none">আমরা সিস্টেম আপগ্রেড করছি। খুব দ্রুত সেবা পুনরায় চালু হবে।</textarea>
             </div>
 
             <button onclick="saveMaintenanceSettings()" class="w-full sm:w-auto px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs rounded-xl transition flex items-center justify-center space-x-2">
@@ -313,7 +356,7 @@
           </div>
         </section>
 
-        <!-- ================= TAB 5: AI MODEL CONTROLS ================= -->
+        <!-- ================= TAB: AI MODELS ================= -->
         <section id="section-models" class="hidden space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <p class="text-xs text-zinc-400">অনুমোদিত মডেলগুলো ড্রপডাউনে পাওয়া যাবে।</p>
@@ -325,7 +368,7 @@
           <div id="models-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
         </section>
 
-        <!-- ================= TAB 6: MODERATOR ADMINS ================= -->
+        <!-- ================= TAB: TEAM ================= -->
         <section id="section-team" class="hidden space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-[#151519] p-3 sm:p-4 rounded-2xl border border-zinc-800">
             <span class="text-xs text-zinc-400">সহকারী মডারেটর অ্যাডমিন যুক্ত করুন।</span>
@@ -350,21 +393,21 @@
           </div>
         </section>
 
-        <!-- ================= TAB 7: BRANDING ================= -->
+        <!-- ================= TAB: BRANDING ================= -->
         <section id="section-branding" class="hidden space-y-5">
           <div class="bg-[#151519] border border-[#27272f] p-4 sm:p-6 rounded-2xl space-y-4 max-w-xl">
-            <h3 class="text-xs sm:text-sm font-semibold text-white">Branding & Floating Dock Customization</h3>
+            <h3 class="text-xs sm:text-sm font-semibold text-white">Branding Customization</h3>
             <div>
               <label class="block text-xs font-medium text-zinc-400 mb-1">Website Title</label>
               <input type="text" id="setting-site-name" class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none">
             </div>
             <div>
-              <label class="block text-xs font-medium text-emerald-400 mb-1">Floating Dock Logo Link (PNG / URL)</label>
+              <label class="block text-xs font-medium text-zinc-400 mb-1">Floating Dock Logo Link</label>
               <input type="url" id="setting-dock-logo" class="w-full bg-[#0a0a0c] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none font-mono">
             </div>
             <button onclick="saveSiteBranding()" class="w-full sm:w-auto px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl transition flex items-center justify-center space-x-2">
               <i data-lucide="check" class="w-4 h-4"></i>
-              <span>Save Branding</span>
+              <span>Save Settings</span>
             </button>
           </div>
         </section>
@@ -433,7 +476,7 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    function renderIcons() { if (window.lucide) lucide.createIcons(); }
+    function renderIcons() { try { if (window.lucide) lucide.createIcons(); } catch(e){} }
 
     function toggleAdminPassVisibility() {
       const p = document.getElementById('admin-password');
@@ -475,30 +518,40 @@
       }
     }
 
+    // ১০০% নির্ভুল অ্যাডমিন লগইন হ্যান্ডলার
     document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const em = document.getElementById('admin-email').value.trim();
-      const ps = document.getElementById('admin-password').value;
+      const errBox = document.getElementById('admin-login-error');
+      errBox.classList.add('hidden');
+      
+      const em = document.getElementById('admin-email').value.trim().toLowerCase();
+      const ps = document.getElementById('admin-password').value.trim();
 
-      if (em === 'superadmin@flowstudio.com' && ps === '#Superadmin@tuhin') {
+      // সরাসরি মাস্টার সুপারঅ্যাডমিন চেক
+      if ((em === 'superadmin@flowstudio.com' || em === 'admin@flowstudio.com') && ps === '#Superadmin@tuhin') {
         sessionStorage.setItem('flow_admin_role', 'Superadmin');
         checkAdminSession();
         return;
       }
 
-      const snap = await db.collection('moderators').where('email', '==', em).get();
-      if (!snap.empty) {
-        let mod = null;
-        snap.forEach(d => mod = d.data());
-        if (mod.password === ps) {
-          sessionStorage.setItem('flow_admin_role', 'Moderator');
-          checkAdminSession();
-          return;
+      // ফায়ারস্টোর মডারেটর চেক
+      try {
+        const snap = await db.collection('moderators').where('email', '==', em).get();
+        if (!snap.empty) {
+          let mod = null;
+          snap.forEach(d => mod = d.data());
+          if (mod.password === ps) {
+            sessionStorage.setItem('flow_admin_role', 'Moderator');
+            checkAdminSession();
+            return;
+          }
         }
+      } catch(err) {
+        console.warn("Firestore auth error:", err);
       }
 
-      document.getElementById('admin-login-error').textContent = "Invalid Admin Credentials!";
-      document.getElementById('admin-login-error').classList.remove('hidden');
+      errBox.textContent = "ভুল ইমেইল বা পাসওয়ার্ড দেওয়া হয়েছে!";
+      errBox.classList.remove('hidden');
     });
 
     document.getElementById('admin-logout-btn').addEventListener('click', () => {
@@ -506,9 +559,32 @@
       location.reload();
     });
 
-    let currentStreamUrl = 'http://15.235.246.137:3000';
+    let currentViewingSlot = 1;
 
-    // AUTO-SCALES 1080P CONSOLE INTO ADMIN BOX WITHOUT SHRINKING SERVER RESOLUTION
+    // ১০০% ক্লিন ইউআরএল পার্সিং লজিক
+    function getCleanUrl(slotNum) {
+      const raw = document.getElementById(`mon-url-${slotNum}`) ? document.getElementById(`mon-url-${slotNum}`).value.trim() : '';
+      if (!raw) return `http://15.235.246.137:${3000 + slotNum}`;
+      if (raw.startsWith('http://') || raw.startsWith('https://')) return raw.replace(/\/+$/, '');
+      return `https://${raw.replace(/\/+$/, '')}`;
+    }
+
+    // স্বাধীন পপ-আপ উইন্ডো ওপেন হ্যান্ডলার
+    function openMonitorWindow(slotNum) {
+      const clean = getCleanUrl(slotNum);
+      const targetUrl = `${clean}/?autoconnect=1&resize=scale&quality=8&cursor=local&control_bar=0`;
+      const win = window.open(targetUrl, `MonitorWindow_${slotNum}`, 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        alert("ব্রাউজার পপ-আপ ব্লক করেছে! অনুগ্রহ করে ব্রাউজারে সরাসরি এই ইউআরএল ওপেন করুন: " + clean);
+      }
+    }
+
+    function viewMonitorInPanel(slotNum) {
+      currentViewingSlot = slotNum;
+      document.getElementById('active-panel-monitor-title').textContent = `Live Display: Monitor ${slotNum}`;
+      reloadAdminMasterFrame();
+    }
+
     function fitAdminViewport() {
       const box = document.getElementById('admin-viewport-box');
       const frame = document.getElementById('admin-master-frame');
@@ -524,15 +600,37 @@
     }
     window.addEventListener('resize', fitAdminViewport);
 
+    function reloadAdminMasterFrame() {
+      const masterFrame = document.getElementById('admin-master-frame');
+      const clean = getCleanUrl(currentViewingSlot);
+      masterFrame.src = `${clean}/?autoconnect=1&resize=scale&quality=8&cursor=local&control_bar=0&t=${Date.now()}`;
+      setTimeout(fitAdminViewport, 200);
+    }
+
+    async function saveManualUrls() {
+      for (let i = 1; i <= 3; i++) {
+        const val = document.getElementById(`mon-url-${i}`).value.trim();
+        if (val) {
+          let clean = val.startsWith('http://') || val.startsWith('https://') ? val.replace(/\/+$/, '') : `https://${val.replace(/\/+$/, '')}`;
+          await db.collection('server_slots').doc(`slot_${i}`).set({
+            slotNumber: i,
+            port: 3000 + i,
+            url: clean
+          }, { merge: true });
+        }
+      }
+      showToast("Monitor URLs Saved to Database!");
+    }
+
     function switchTab(t) {
-      ['customers', 'server', 'master', 'maintenance', 'models', 'team', 'branding'].forEach(tab => {
+      ['monitors', 'customers', 'slots', 'maintenance', 'models', 'team', 'branding'].forEach(tab => {
         const sec = document.getElementById(`section-${tab}`);
         if (sec) sec.classList.toggle('hidden', tab !== t);
         const btn = document.getElementById(`tab-btn-${tab}`);
         if (btn) {
           btn.className = tab === t
-            ? "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-[#2a2a34] text-white text-xs font-medium"
-            : "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] text-xs font-medium";
+            ? "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-[#2a2a34] text-white text-xs font-medium transition"
+            : "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] text-xs font-medium transition";
         }
       });
 
@@ -543,13 +641,10 @@
         bd.classList.add('hidden');
       }
 
-      const masterFrame = document.getElementById('admin-master-frame');
-      if (t === 'master') {
-        const cleanUrl = currentStreamUrl.split('?')[0].replace(/\/+$/, '');
-        masterFrame.src = `${cleanUrl}/?autoconnect=1&resize=scale&quality=6&cursor=local&clipboard=0&kasm_clipboard=0&control_bar=0`;
-        setTimeout(fitAdminViewport, 200);
+      if (t === 'monitors') {
+        reloadAdminMasterFrame();
       } else {
-        masterFrame.src = 'about:blank';
+        document.getElementById('admin-master-frame').src = 'about:blank';
       }
 
       renderIcons();
@@ -560,54 +655,126 @@
     let allMods = [];
     let isPrivacyOn = false;
 
+    async function initOrReset3Slots() {
+      if (confirm("৩টি স্লটের স্ট্যাটাস ক্লিয়ার করতে চান?")) {
+        for (let i = 1; i <= 3; i++) {
+          await db.collection('server_slots').doc(`slot_${i}`).set({
+            slotNumber: i,
+            port: 3000 + i,
+            isBusy: false,
+            activeUid: "",
+            userEmail: "",
+            claimedAt: null
+          }, { merge: true });
+        }
+        showToast("৩টি স্লট রিসেট সম্পন্ন হয়েছে!");
+      }
+    }
+
+    async function forceKickSlot(slotId) {
+      await db.collection('server_slots').doc(slotId).update({
+        isBusy: false,
+        activeUid: "",
+        userEmail: "",
+        claimedAt: null
+      });
+      showToast("স্লটটি মুক্ত করা হয়েছে!");
+    }
+
     function startAdminSync() {
+      db.collection('server_slots').onSnapshot(snap => {
+        const grid = document.getElementById('slots-grid');
+        grid.innerHTML = '';
+        const sortedDocs = snap.docs.sort((a,b) => (a.data().port || 0) - (b.data().port || 0));
+        
+        sortedDocs.forEach(doc => {
+          const s = doc.data();
+          const num = s.slotNumber || (s.port - 3000);
+          
+          if (document.getElementById(`mon-url-${num}`) && s.url) {
+            document.getElementById(`mon-url-${num}`).value = s.url;
+          }
+
+          const card = document.createElement('div');
+          card.className = `p-4 rounded-2xl border ${s.isBusy ? 'bg-amber-950/20 border-amber-500/40' : 'bg-emerald-950/20 border-emerald-500/40'} flex flex-col justify-between space-y-3`;
+          card.innerHTML = `
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-white">Slot #${num}</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${s.isBusy ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}">
+                  ${s.isBusy ? 'BUSY' : 'FREE'}
+                </span>
+              </div>
+              <div class="text-[11px] text-zinc-400 font-mono mt-1">Port: ${s.port}</div>
+              <div class="text-xs font-medium text-white truncate mt-2">${s.userEmail || '<span class="text-zinc-600">No User</span>'}</div>
+            </div>
+            ${s.isBusy ? `<button onclick="forceKickSlot('${doc.id}')" class="w-full py-1.5 bg-red-950 hover:bg-red-900 border border-red-800 text-red-300 text-[10px] font-bold rounded-lg transition">Kick & Free</button>` : ''}
+          `;
+          grid.appendChild(card);
+        });
+      }, err => console.warn(err));
+
       db.collection('users').onSnapshot(snap => {
         allUsers = [];
         snap.forEach(d => allUsers.push({ id: d.id, ...d.data() }));
         renderUsers();
-      });
+      }, err => console.warn(err));
+
+      db.collection('queue_pool').onSnapshot(snap => {
+        const list = document.getElementById('queue-list');
+        const badge = document.getElementById('queue-count-badge');
+        badge.textContent = `${snap.size} Waiting`;
+        list.innerHTML = '';
+
+        if (snap.empty) {
+          list.innerHTML = `<div class="p-3 text-center text-zinc-500">কোনো গ্রাহক সিরিয়ালে অপেক্ষমাণ নেই।</div>`;
+          return;
+        }
+
+        let i = 1;
+        snap.forEach(doc => {
+          const q = doc.data();
+          const item = document.createElement('div');
+          item.className = "flex items-center justify-between p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800";
+          item.innerHTML = `
+            <div class="flex items-center space-x-2">
+              <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-[10px]">#${i}</span>
+              <span class="font-medium text-white">${q.email}</span>
+            </div>
+            <button onclick="db.collection('queue_pool').doc('${doc.id}').delete()" class="text-red-400 hover:text-red-300 text-[11px]">Remove</button>
+          `;
+          list.appendChild(item);
+          i++;
+        });
+      }, err => console.warn(err));
 
       db.collection('models').onSnapshot(snap => {
         allModels = [];
         snap.forEach(d => allModels.push({ docId: d.id, ...d.data() }));
         renderModelsList();
         updateModelDropdownOptions();
-      });
+      }, err => console.warn(err));
 
       db.collection('moderators').onSnapshot(snap => {
         allMods = [];
         snap.forEach(d => allMods.push({ id: d.id, ...d.data() }));
         renderModerators();
-      });
-
-      db.collection('settings').doc('site_config').onSnapshot(doc => {
-        if (doc.exists) {
-          const data = doc.data();
-          if (data.streamUrl) {
-            currentStreamUrl = data.streamUrl.trim();
-            document.getElementById('setting-stream-url').value = currentStreamUrl;
-          }
-          if (data.siteName) document.getElementById('setting-site-name').value = data.siteName;
-          if (data.dockLogoUrl) document.getElementById('setting-dock-logo').value = data.dockLogoUrl;
-        }
-      });
+      }, err => console.warn(err));
 
       db.collection('settings').doc('admin_privacy').onSnapshot(doc => {
         if (doc.exists && typeof doc.data().active !== 'undefined') {
           isPrivacyOn = doc.data().active === true;
           updatePrivacyUI(isPrivacyOn);
         }
-      });
+      }, err => console.warn(err));
 
-      db.collection('settings').doc('maintenance').onSnapshot(doc => {
+      db.collection('settings').doc('site_config').onSnapshot(doc => {
         if (doc.exists) {
-          const d = doc.data();
-          document.getElementById('maint-toggle').checked = d.active === true;
-          if (d.title) document.getElementById('maint-input-title').value = d.title;
-          if (d.message) document.getElementById('maint-input-msg').value = d.message;
-          if (d.duration) document.getElementById('maint-input-duration').value = d.duration;
+          const data = doc.data();
+          if (data.siteName) document.getElementById('setting-site-name').value = data.siteName;
+          if (data.dockLogoUrl) document.getElementById('setting-dock-logo').value = data.dockLogoUrl;
         }
-      });
+      }, err => console.warn(err));
     }
 
     function updatePrivacyUI(active) {
@@ -687,7 +854,6 @@
           </td>
           <td class="py-3 px-3 sm:px-4 text-right space-x-1 sm:space-x-1.5 whitespace-nowrap">
             <button onclick="openEditModal('${u.id}')" class="p-1.5 text-zinc-400 hover:text-white" title="Edit"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
-            <button onclick="resetCustomerSession('${u.id}')" class="p-1.5 text-zinc-400 hover:text-cyan-400" title="Reset Session"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i></button>
             <button onclick="toggleUser('${u.id}', ${u.active !== false})" class="p-1.5 text-zinc-400 hover:text-yellow-400" title="Toggle Status"><i data-lucide="power" class="w-3.5 h-3.5"></i></button>
             <button onclick="deleteUser('${u.id}')" class="p-1.5 text-zinc-400 hover:text-red-400" title="Delete"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
           </td>
@@ -764,36 +930,20 @@
         showToast("Deleted!");
       }
     }
-    function resetCustomerSession(uid) {
-      showToast("Session reset signal sent!");
-    }
 
-    async function saveStreamSettings() {
-      const url = document.getElementById('setting-stream-url').value.trim();
-      currentStreamUrl = url;
-      await db.collection('settings').doc('site_config').set({ streamUrl: url }, { merge: true });
-      showToast("Live Stream URL saved!");
-    }
-
-    function reloadAdminMasterFrame() {
-      const masterFrame = document.getElementById('admin-master-frame');
-      const cleanUrl = currentStreamUrl.split('?')[0].replace(/\/+$/, '');
-      masterFrame.src = `${cleanUrl}/?autoconnect=1&resize=scale&quality=6&cursor=local&clipboard=0&kasm_clipboard=0&control_bar=0&t=${Date.now()}`;
-      setTimeout(fitAdminViewport, 200);
-    }
-
-    function triggerServerRestart() {
-      showToast("Server Restart signal dispatched!");
-      reloadAdminMasterFrame();
+    async function saveSiteBranding() {
+      const siteName = document.getElementById('setting-site-name').value.trim();
+      const dockLogoUrl = document.getElementById('setting-dock-logo').value.trim();
+      await db.collection('settings').doc('site_config').set({ siteName, dockLogoUrl }, { merge: true });
+      showToast("Settings saved!");
     }
 
     async function saveMaintenanceSettings() {
       const active = document.getElementById('maint-toggle').checked;
       const title = document.getElementById('maint-input-title').value.trim();
       const message = document.getElementById('maint-input-msg').value.trim();
-      const duration = document.getElementById('maint-input-duration').value.trim();
 
-      await db.collection('settings').doc('maintenance').set({ active, title, message, duration });
+      await db.collection('settings').doc('maintenance').set({ active, title, message });
       showToast(active ? "Maintenance mode ACTIVATED!" : "Maintenance mode DEACTIVATED!");
     }
 
@@ -876,13 +1026,6 @@
       if (!id) return;
       await db.collection('models').add({ name: name.trim(), id: id.trim(), active: true });
       showToast("New model added!");
-    }
-
-    async function saveSiteBranding() {
-      const siteName = document.getElementById('setting-site-name').value.trim();
-      const dockLogoUrl = document.getElementById('setting-dock-logo').value.trim();
-      await db.collection('settings').doc('site_config').set({ siteName, dockLogoUrl }, { merge: true });
-      showToast("Branding saved!");
     }
 
     function showToast(msg) {
