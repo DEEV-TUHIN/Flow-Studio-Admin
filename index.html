@@ -18,7 +18,7 @@
 </head>
 <body class="bg-[#09090b] text-zinc-200 min-h-screen flex flex-col font-sans select-none overflow-x-hidden">
 
-  <!-- ================= 1. ADMIN LOGIN SCREEN ================= -->
+  <!-- ADMIN LOGIN -->
   <div id="admin-auth-screen" class="fixed inset-0 z-50 bg-[#060608] flex items-center justify-center p-4">
     <div class="w-full max-w-sm bg-[#151519] border border-[#27272f] p-6 sm:p-8 rounded-3xl shadow-2xl flex flex-col items-center">
       <div class="w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center mb-3 text-white">
@@ -56,7 +56,7 @@
     </div>
   </div>
 
-  <!-- ================= 2. ADMIN DASHBOARD ================= -->
+  <!-- ADMIN MAIN APP -->
   <div id="admin-main-app" class="hidden flex-1 flex flex-col lg:flex-row w-full h-screen overflow-hidden relative">
     
     <div class="lg:hidden flex items-center justify-between bg-[#0f0f13] border-b border-[#27272f] px-4 py-3 shrink-0 z-30">
@@ -94,14 +94,14 @@
         </div>
 
         <nav class="space-y-1">
-          <button onclick="switchTab('monitors')" id="tab-btn-monitors" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-[#2a2a34] text-white text-xs font-medium transition">
-            <i data-lucide="monitor" class="w-4 h-4 text-amber-400"></i>
-            <span>3-Monitor URL Hub</span>
-          </button>
-
-          <button onclick="switchTab('customers')" id="tab-btn-customers" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] hover:text-white text-xs font-medium transition">
+          <button onclick="switchTab('customers')" id="tab-btn-customers" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-[#2a2a34] text-white text-xs font-medium transition">
             <i data-lucide="users" class="w-4 h-4 text-emerald-400"></i>
             <span>Customer & Validity</span>
+          </button>
+
+          <button onclick="switchTab('monitors')" id="tab-btn-monitors" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] hover:text-white text-xs font-medium transition">
+            <i data-lucide="monitor" class="w-4 h-4 text-amber-400"></i>
+            <span>3-Monitor URL Hub</span>
           </button>
 
           <button onclick="switchTab('slots')" id="tab-btn-slots" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] hover:text-white text-xs font-medium transition">
@@ -142,128 +142,17 @@
     <main class="flex-1 flex flex-col h-full bg-[#09090b] overflow-y-auto">
       
       <header class="h-14 sm:h-16 border-b border-[#27272f] px-4 sm:px-8 flex items-center justify-between sticky top-0 bg-[#09090b]/80 backdrop-blur z-20">
-        <h1 id="tab-title" class="text-xs sm:text-sm font-semibold text-white truncate">3-Monitor Independent URL Hub</h1>
+        <h1 id="tab-title" class="text-xs sm:text-sm font-semibold text-white truncate">Customer & Subscription Management</h1>
         <div class="flex items-center space-x-2 shrink-0">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-[11px] sm:text-xs text-zinc-400 font-mono">3 Monitors Live</span>
+          <span class="text-[11px] sm:text-xs text-zinc-400 font-mono">3 Servers Live</span>
         </div>
       </header>
 
       <div class="p-4 sm:p-8 max-w-6xl w-full mx-auto space-y-5 sm:space-y-6">
 
-        <!-- ================= TAB: 3-MONITOR URL HUB ================= -->
-        <section id="section-monitors" class="space-y-5">
-          
-          <div class="bg-[#151519] border border-amber-500/20 p-4 sm:p-5 rounded-2xl space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
-              <div>
-                <h3 class="text-xs sm:text-sm font-bold text-amber-300 flex items-center gap-2">
-                  <i data-lucide="monitor" class="w-4 h-4"></i>
-                  <span>৩টি মনিটরের স্বতন্ত্র লাইভ লিঙ্ক ও গুগল অ্যাকাউন্ট</span>
-                </h3>
-                <p class="text-[11px] sm:text-xs text-zinc-400 mt-0.5">প্রতিটি মনিটরে নিজস্ব গুগল অ্যাকাউন্ট লগইন/লগআউট করতে "Open Window" বাটনে চাপুন।</p>
-              </div>
-
-              <div class="flex items-center space-x-2">
-                <button id="btn-toggle-privacy" onclick="toggleAdminPrivacy()" class="px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition">
-                  <i data-lucide="eye-off" class="w-3.5 h-3.5"></i>
-                  <span id="privacy-status-text">Enable Privacy Shield</span>
-                </button>
-                <button onclick="finishAdminLogin()" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition shadow">
-                  <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                  <span>Publish Live</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- 3 MONITOR URL INPUT / VIEW BOXES -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-              
-              <!-- MONITOR 1 -->
-              <div class="bg-black/60 p-3.5 rounded-xl border border-blue-500/40 space-y-2">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-blue-400">Monitor 1 URL (Port 3001)</span>
-                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
-                </div>
-                <input type="text" id="mon-url-1" placeholder="https://xxxx.trycloudflare.com" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
-                <div class="flex gap-1.5 pt-1">
-                  <button onclick="openMonitorWindow(1)" class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
-                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                    <span>Open Window</span>
-                  </button>
-                  <button onclick="viewMonitorInPanel(1)" class="px-2.5 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg transition">
-                    View
-                  </button>
-                </div>
-              </div>
-
-              <!-- MONITOR 2 -->
-              <div class="bg-black/60 p-3.5 rounded-xl border border-purple-500/40 space-y-2">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-purple-400">Monitor 2 URL (Port 3002)</span>
-                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
-                </div>
-                <input type="text" id="mon-url-2" placeholder="https://xxxx.trycloudflare.com" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
-                <div class="flex gap-1.5 pt-1">
-                  <button onclick="openMonitorWindow(2)" class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
-                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                    <span>Open Window</span>
-                  </button>
-                  <button onclick="viewMonitorInPanel(2)" class="px-2.5 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg transition">
-                    View
-                  </button>
-                </div>
-              </div>
-
-              <!-- MONITOR 3 -->
-              <div class="bg-black/60 p-3.5 rounded-xl border border-pink-500/40 space-y-2">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-pink-400">Monitor 3 URL (Port 3003)</span>
-                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
-                </div>
-                <input type="text" id="mon-url-3" placeholder="https://xxxx.trycloudflare.com" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
-                <div class="flex gap-1.5 pt-1">
-                  <button onclick="openMonitorWindow(3)" class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
-                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                    <span>Open Window</span>
-                  </button>
-                  <button onclick="viewMonitorInPanel(3)" class="px-2.5 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg transition">
-                    View
-                  </button>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="flex justify-end">
-              <button onclick="saveManualUrls()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl flex items-center space-x-1.5 transition shadow">
-                <i data-lucide="save" class="w-3.5 h-3.5"></i>
-                <span>Save URLs to Database</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- IN-PANEL VIEWPORT -->
-          <div class="bg-[#151519] border border-[#27272f] rounded-2xl p-3 sm:p-4 space-y-3">
-            <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
-              <span id="active-panel-monitor-title" class="text-xs font-semibold text-white">Live Display: Monitor 1</span>
-              <button onclick="reloadAdminMasterFrame()" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg flex items-center space-x-1">
-                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
-                <span>Reload</span>
-              </button>
-            </div>
-
-            <div id="admin-viewport-box" class="w-full h-[450px] sm:h-[550px] lg:h-[650px] bg-black rounded-xl overflow-hidden border border-zinc-800 relative flex items-center justify-center">
-              <iframe id="admin-master-frame" src="about:blank" 
-                style="width: 1920px; height: 1080px; transform-origin: top left; border: none; position: absolute; top: 0; left: 0;" 
-                allow="clipboard-read; clipboard-write; autoplay"></iframe>
-            </div>
-          </div>
-
-        </section>
-
         <!-- ================= TAB: CUSTOMERS ================= -->
-        <section id="section-customers" class="hidden space-y-4">
+        <section id="section-customers" class="space-y-4">
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#151519] p-3 sm:p-4 rounded-2xl border border-[#27272f]">
             <div class="relative w-full sm:w-72">
               <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"></i>
@@ -295,6 +184,77 @@
           </div>
         </section>
 
+        <!-- ================= TAB: 3-MONITOR URL HUB ================= -->
+        <section id="section-monitors" class="hidden space-y-5">
+          <div class="bg-[#151519] border border-amber-500/20 p-4 sm:p-5 rounded-2xl space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
+              <div>
+                <h3 class="text-xs sm:text-sm font-bold text-amber-300 flex items-center gap-2">
+                  <i data-lucide="monitor" class="w-4 h-4"></i>
+                  <span>৩টি মনিটরের লাইভ ক্লাউডফ্লেয়ার লিঙ্ক</span>
+                </h3>
+                <p class="text-[11px] sm:text-xs text-zinc-400 mt-0.5">প্রতিটি মনিটরে গুগল অ্যাকাউন্ট লগইন করতে "Open Window" বাটনে চাপুন।</p>
+              </div>
+
+              <div class="flex items-center space-x-2">
+                <button id="btn-toggle-privacy" onclick="toggleAdminPrivacy()" class="px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition">
+                  <i data-lucide="eye-off" class="w-3.5 h-3.5"></i>
+                  <span id="privacy-status-text">Enable Privacy Shield</span>
+                </button>
+                <button onclick="finishAdminLogin()" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition shadow">
+                  <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                  <span>Publish Live</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+              <div class="bg-black/60 p-3.5 rounded-xl border border-blue-500/40 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-blue-400">Server 1 (Port 3001)</span>
+                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
+                </div>
+                <input type="text" id="mon-url-1" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
+                <button onclick="openMonitorWindow(1)" class="w-full py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                  <span>Open Window</span>
+                </button>
+              </div>
+
+              <div class="bg-black/60 p-3.5 rounded-xl border border-purple-500/40 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-purple-400">Server 2 (Port 3002)</span>
+                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
+                </div>
+                <input type="text" id="mon-url-2" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
+                <button onclick="openMonitorWindow(2)" class="w-full py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                  <span>Open Window</span>
+                </button>
+              </div>
+
+              <div class="bg-black/60 p-3.5 rounded-xl border border-pink-500/40 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-pink-400">Server 3 (Port 3003)</span>
+                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
+                </div>
+                <input type="text" id="mon-url-3" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
+                <button onclick="openMonitorWindow(3)" class="w-full py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                  <span>Open Window</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex justify-end">
+              <button onclick="saveManualUrls()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl flex items-center space-x-1.5 transition shadow">
+                <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                <span>Save URLs to Database</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
         <!-- ================= TAB: LIVE 3-SLOTS STATUS ================= -->
         <section id="section-slots" class="hidden space-y-5">
           <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
@@ -309,20 +269,6 @@
           </div>
 
           <div id="slots-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
-
-          <div class="bg-[#151519] border border-zinc-800 p-4 sm:p-5 rounded-2xl space-y-3">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-2">
-                <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
-                <h3 class="text-xs sm:text-sm font-semibold text-white">Live Waiting Queue</h3>
-              </div>
-              <span id="queue-count-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/10 text-amber-300 border border-amber-500/20">0 Waiting</span>
-            </div>
-
-            <div id="queue-list" class="space-y-2 text-xs">
-              <div class="p-3 text-center text-zinc-500">কোনো গ্রাহক সিরিয়ালে অপেক্ষমাণ নেই।</div>
-            </div>
-          </div>
         </section>
 
         <!-- ================= TAB: MAINTENANCE ================= -->
@@ -463,6 +409,17 @@
   </div>
 
   <script>
+    // ক্লিপবোর্ড পারমিশন ব্লক
+    if (navigator.permissions && navigator.permissions.query) {
+      const origQuery = navigator.permissions.query;
+      navigator.permissions.query = function(params) {
+        if (params && params.name && params.name.includes('clipboard')) {
+          return Promise.resolve({ state: 'denied', onchange: null });
+        }
+        return origQuery.apply(this, arguments);
+      };
+    }
+
     const firebaseConfig = {
       apiKey: "AIzaSyDdtiWw6gzYFqSyuq2-ufFzmJ1PZyL2bCE",
       authDomain: "flow-studio-a283b.firebaseapp.com",
@@ -518,7 +475,6 @@
       }
     }
 
-    // ১০০% নির্ভুল অ্যাডমিন লগইন হ্যান্ডলার
     document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const errBox = document.getElementById('admin-login-error');
@@ -527,14 +483,12 @@
       const em = document.getElementById('admin-email').value.trim().toLowerCase();
       const ps = document.getElementById('admin-password').value.trim();
 
-      // সরাসরি মাস্টার সুপারঅ্যাডমিন চেক
       if ((em === 'superadmin@flowstudio.com' || em === 'admin@flowstudio.com') && ps === '#Superadmin@tuhin') {
         sessionStorage.setItem('flow_admin_role', 'Superadmin');
         checkAdminSession();
         return;
       }
 
-      // ফায়ারস্টোর মডারেটর চেক
       try {
         const snap = await db.collection('moderators').where('email', '==', em).get();
         if (!snap.empty) {
@@ -546,9 +500,7 @@
             return;
           }
         }
-      } catch(err) {
-        console.warn("Firestore auth error:", err);
-      }
+      } catch(err) {}
 
       errBox.textContent = "ভুল ইমেইল বা পাসওয়ার্ড দেওয়া হয়েছে!";
       errBox.classList.remove('hidden');
@@ -559,9 +511,6 @@
       location.reload();
     });
 
-    let currentViewingSlot = 1;
-
-    // ১০০% ক্লিন ইউআরএল পার্সিং লজিক
     function getCleanUrl(slotNum) {
       const raw = document.getElementById(`mon-url-${slotNum}`) ? document.getElementById(`mon-url-${slotNum}`).value.trim() : '';
       if (!raw) return `http://15.235.246.137:${3000 + slotNum}`;
@@ -569,42 +518,10 @@
       return `https://${raw.replace(/\/+$/, '')}`;
     }
 
-    // স্বাধীন পপ-আপ উইন্ডো ওপেন হ্যান্ডলার
     function openMonitorWindow(slotNum) {
       const clean = getCleanUrl(slotNum);
-      const targetUrl = `${clean}/?autoconnect=1&resize=scale&quality=8&cursor=local&control_bar=0`;
-      const win = window.open(targetUrl, `MonitorWindow_${slotNum}`, 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
-      if (!win || win.closed || typeof win.closed === 'undefined') {
-        alert("ব্রাউজার পপ-আপ ব্লক করেছে! অনুগ্রহ করে ব্রাউজারে সরাসরি এই ইউআরএল ওপেন করুন: " + clean);
-      }
-    }
-
-    function viewMonitorInPanel(slotNum) {
-      currentViewingSlot = slotNum;
-      document.getElementById('active-panel-monitor-title').textContent = `Live Display: Monitor ${slotNum}`;
-      reloadAdminMasterFrame();
-    }
-
-    function fitAdminViewport() {
-      const box = document.getElementById('admin-viewport-box');
-      const frame = document.getElementById('admin-master-frame');
-      if (!box || !frame) return;
-
-      const scaleX = box.clientWidth / 1920;
-      const scaleY = box.clientHeight / 1080;
-      const scale = Math.min(scaleX, scaleY);
-
-      frame.style.transform = `scale(${scale})`;
-      frame.style.left = `${(box.clientWidth - 1920 * scale) / 2}px`;
-      frame.style.top = `${(box.clientHeight - 1080 * scale) / 2}px`;
-    }
-    window.addEventListener('resize', fitAdminViewport);
-
-    function reloadAdminMasterFrame() {
-      const masterFrame = document.getElementById('admin-master-frame');
-      const clean = getCleanUrl(currentViewingSlot);
-      masterFrame.src = `${clean}/?autoconnect=1&resize=scale&quality=8&cursor=local&control_bar=0&t=${Date.now()}`;
-      setTimeout(fitAdminViewport, 200);
+      const targetUrl = `${clean}/?autoconnect=1&resize=scale&quality=8&cursor=local&control_bar=0&clipboard=0`;
+      window.open(targetUrl, `MonitorWindow_${slotNum}`, 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
     }
 
     async function saveManualUrls() {
@@ -623,7 +540,7 @@
     }
 
     function switchTab(t) {
-      ['monitors', 'customers', 'slots', 'maintenance', 'models', 'team', 'branding'].forEach(tab => {
+      ['customers', 'monitors', 'slots', 'maintenance', 'models', 'team', 'branding'].forEach(tab => {
         const sec = document.getElementById(`section-${tab}`);
         if (sec) sec.classList.toggle('hidden', tab !== t);
         const btn = document.getElementById(`tab-btn-${tab}`);
@@ -633,20 +550,6 @@
             : "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] text-xs font-medium transition";
         }
       });
-
-      const sb = document.getElementById('admin-sidebar');
-      const bd = document.getElementById('sidebar-backdrop');
-      if (window.innerWidth < 1024) {
-        sb.classList.add('-translate-x-full');
-        bd.classList.add('hidden');
-      }
-
-      if (t === 'monitors') {
-        reloadAdminMasterFrame();
-      } else {
-        document.getElementById('admin-master-frame').src = 'about:blank';
-      }
-
       renderIcons();
     }
 
@@ -654,6 +557,35 @@
     let allModels = [];
     let allMods = [];
     let isPrivacyOn = false;
+
+    // নির্ভরযোগ্য গ্রাহক সেশন ও প্রজেক্ট রিসেট ফাংশন
+    async function resetCustomerSession(uid) {
+      if (confirm("এই গ্রাহকের ডিভাইস লিংক ও সংরক্ষিত প্রজেক্ট রিসেট করতে চান? পরবর্তী লগইনে সম্পূর্ণ নতুন প্রজেক্ট তৈরি হবে।")) {
+        try {
+          await db.collection('users').doc(uid).update({
+            activeDevices: [],
+            assignedProjectUrl: ""
+          });
+
+          for (let i = 1; i <= 3; i++) {
+            const slotRef = db.collection('server_slots').doc(`slot_${i}`);
+            const sDoc = await slotRef.get();
+            if (sDoc.exists && sDoc.data().activeUid === uid) {
+              await slotRef.update({
+                isBusy: false,
+                activeUid: "",
+                userEmail: "",
+                claimedAt: null
+              });
+            }
+          }
+
+          showToast("গ্রাহকের সেশন ও প্রজেক্ট রিসেট সম্পন্ন হয়েছে!");
+        } catch(err) {
+          showToast("রিসেট ত্রুটি: " + err.message);
+        }
+      }
+    }
 
     async function initOrReset3Slots() {
       if (confirm("৩টি স্লটের স্ট্যাটাস ক্লিয়ার করতে চান?")) {
@@ -669,16 +601,6 @@
         }
         showToast("৩টি স্লট রিসেট সম্পন্ন হয়েছে!");
       }
-    }
-
-    async function forceKickSlot(slotId) {
-      await db.collection('server_slots').doc(slotId).update({
-        isBusy: false,
-        activeUid: "",
-        userEmail: "",
-        claimedAt: null
-      });
-      showToast("স্লটটি মুক্ত করা হয়েছে!");
     }
 
     function startAdminSync() {
@@ -700,7 +622,7 @@
           card.innerHTML = `
             <div>
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-white">Slot #${num}</span>
+                <span class="text-xs font-bold text-white">Server #${num}</span>
                 <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${s.isBusy ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}">
                   ${s.isBusy ? 'BUSY' : 'FREE'}
                 </span>
@@ -708,7 +630,6 @@
               <div class="text-[11px] text-zinc-400 font-mono mt-1">Port: ${s.port}</div>
               <div class="text-xs font-medium text-white truncate mt-2">${s.userEmail || '<span class="text-zinc-600">No User</span>'}</div>
             </div>
-            ${s.isBusy ? `<button onclick="forceKickSlot('${doc.id}')" class="w-full py-1.5 bg-red-950 hover:bg-red-900 border border-red-800 text-red-300 text-[10px] font-bold rounded-lg transition">Kick & Free</button>` : ''}
           `;
           grid.appendChild(card);
         });
@@ -718,34 +639,6 @@
         allUsers = [];
         snap.forEach(d => allUsers.push({ id: d.id, ...d.data() }));
         renderUsers();
-      }, err => console.warn(err));
-
-      db.collection('queue_pool').onSnapshot(snap => {
-        const list = document.getElementById('queue-list');
-        const badge = document.getElementById('queue-count-badge');
-        badge.textContent = `${snap.size} Waiting`;
-        list.innerHTML = '';
-
-        if (snap.empty) {
-          list.innerHTML = `<div class="p-3 text-center text-zinc-500">কোনো গ্রাহক সিরিয়ালে অপেক্ষমাণ নেই।</div>`;
-          return;
-        }
-
-        let i = 1;
-        snap.forEach(doc => {
-          const q = doc.data();
-          const item = document.createElement('div');
-          item.className = "flex items-center justify-between p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800";
-          item.innerHTML = `
-            <div class="flex items-center space-x-2">
-              <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-[10px]">#${i}</span>
-              <span class="font-medium text-white">${q.email}</span>
-            </div>
-            <button onclick="db.collection('queue_pool').doc('${doc.id}').delete()" class="text-red-400 hover:text-red-300 text-[11px]">Remove</button>
-          `;
-          list.appendChild(item);
-          i++;
-        });
       }, err => console.warn(err));
 
       db.collection('models').onSnapshot(snap => {
@@ -853,8 +746,10 @@
             </span>
           </td>
           <td class="py-3 px-3 sm:px-4 text-right space-x-1 sm:space-x-1.5 whitespace-nowrap">
+            <button onclick="resetCustomerSession('${u.id}')" class="p-1.5 text-zinc-400 hover:text-cyan-400 transition" title="Reset Session & Project">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            </button>
             <button onclick="openEditModal('${u.id}')" class="p-1.5 text-zinc-400 hover:text-white" title="Edit"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
-            <button onclick="resetCustomerSession('${u.id}')" class="p-1.5 text-zinc-400 hover:text-cyan-400" title="Reset Session & Project"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i></button>
             <button onclick="toggleUser('${u.id}', ${u.active !== false})" class="p-1.5 text-zinc-400 hover:text-yellow-400" title="Toggle Status"><i data-lucide="power" class="w-3.5 h-3.5"></i></button>
             <button onclick="deleteUser('${u.id}')" class="p-1.5 text-zinc-400 hover:text-red-400" title="Delete"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
           </td>
