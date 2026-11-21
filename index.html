@@ -948,9 +948,9 @@
       }
     }
     async function openAddModelModal() {
-      const name = prompt("Model Display Name (যেমন: Veo 3.1 - Ultra):");
+      const name = prompt("Model Display Name (যেমন: Veo 3.1 lite [lower priority]):");
       if (!name) return;
-      const id = prompt("Model Identifier (যেমন: veo-3.1-ultra):");
+      const id = prompt("Model Identifier (যেমন: Veo 3.1 lite [lower priority]):");
       if (!id) return;
       await db.collection('models').add({ name: name.trim(), id: id.trim(), active: true });
       showToast("New model added!");
