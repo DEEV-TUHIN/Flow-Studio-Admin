@@ -104,11 +104,6 @@
             <span>3-Monitor URL Hub</span>
           </button>
 
-          <button onclick="switchTab('slots')" id="tab-btn-slots" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] hover:text-white text-xs font-medium transition">
-            <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
-            <span>Live 3-Slots Status</span>
-          </button>
-
           <button onclick="switchTab('maintenance')" id="tab-btn-maintenance" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] hover:text-white text-xs font-medium transition">
             <i data-lucide="alert-triangle" class="w-4 h-4 text-orange-400"></i>
             <span>Maintenance Hub</span>
@@ -132,7 +127,7 @@
       </div>
 
       <div class="pt-3 border-t border-zinc-800 space-y-2">
-        <button id="admin-logout-btn" class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-red-400 hover:bg-red-950/20 text-xs font-medium transition">
+        <button type="button" id="admin-logout-btn" onclick="handleAdminLogout()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-red-400 hover:bg-red-950/20 text-xs font-medium transition">
           <i data-lucide="log-out" class="w-4 h-4"></i>
           <span>Logout</span>
         </button>
@@ -145,7 +140,7 @@
         <h1 id="tab-title" class="text-xs sm:text-sm font-semibold text-white truncate">Customer & Subscription Management</h1>
         <div class="flex items-center space-x-2 shrink-0">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-[11px] sm:text-xs text-zinc-400 font-mono">3 Servers Live</span>
+          <span class="text-[11px] sm:text-xs text-zinc-400 font-mono">3 Proxy Servers Live</span>
         </div>
       </header>
 
@@ -191,9 +186,9 @@
               <div>
                 <h3 class="text-xs sm:text-sm font-bold text-amber-300 flex items-center gap-2">
                   <i data-lucide="monitor" class="w-4 h-4"></i>
-                  <span>৩টি মনিটরের লাইভ ক্লাউডফ্লেয়ার লিঙ্ক</span>
+                  <span>৩টি মনিটরের রিভার্স প্রক্সি ও মেইন অ্যাকাউন্ট সিঙ্ক হাব</span>
                 </h3>
-                <p class="text-[11px] sm:text-xs text-zinc-400 mt-0.5">প্রতিটি মনিটরে গুগল অ্যাকাউন্ট লগইন করতে "Open Window" এবং অ্যাকাউন্ট পরিবর্তন করতে "Logout Account" বাটনে চাপুন।</p>
+                <p class="text-[11px] sm:text-xs text-zinc-400 mt-0.5">প্রথমে "Main Login" বাটনে ক্লিক করে গুগল অ্যাকাউন্ট লগইন করুন, এরপর পাশের "Sync Proxy" বাটনে ক্লিক করলেই সরাসরি রিভার্স প্রক্সিতে সিঙ্ক হয়ে যাবে।</p>
               </div>
 
               <div class="flex items-center space-x-2">
@@ -209,12 +204,20 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-              <div class="bg-black/60 p-3.5 rounded-xl border border-blue-500/40 space-y-2">
+              <!-- SERVER 1 -->
+              <div class="bg-black/60 p-3.5 rounded-xl border border-blue-500/40 space-y-2.5">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-blue-400">Server 1 (Port 3001)</span>
-                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
+                  <span class="text-xs font-bold text-blue-400">Server 1 (Proxy 4051)</span>
+                  <span id="mon-status-1" class="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
                 </div>
-                <input type="text" id="mon-url-1" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
+                <div class="space-y-1">
+                  <label class="block text-[10px] text-zinc-400 font-medium">Reverse Proxy URL (Customer)</label>
+                  <input type="text" id="mon-url-1" placeholder="https://...trycloudflare.com" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-blue-500/60">
+                </div>
+                <div class="space-y-1">
+                  <label class="block text-[10px] text-amber-400/90 font-medium">Main Account Login URL (VNC)</label>
+                  <input type="text" id="login-url-1" placeholder="https://... (or VPS Port 3001)" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none focus:border-amber-500/60">
+                </div>
                 <div class="grid grid-cols-2 gap-2 pt-0.5">
                   <button onclick="openMonitorWindow(1)" class="w-full py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
                     <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
@@ -225,14 +228,33 @@
                     <span>Logout Account</span>
                   </button>
                 </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <button onclick="openMainLoginWindow(1)" class="w-full py-1.5 bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-black border border-amber-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                    <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
+                    <span>Main Login</span>
+                  </button>
+                  <button id="sync-btn-1" onclick="syncMonitorToProxy(1)" class="w-full py-1.5 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-black border border-emerald-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    <span>Sync Proxy</span>
+                  </button>
+                </div>
+                <div id="mon-meta-1" class="text-[10px] text-zinc-500 font-mono truncate">Status: Waiting for check...</div>
               </div>
 
-              <div class="bg-black/60 p-3.5 rounded-xl border border-purple-500/40 space-y-2">
+              <!-- SERVER 2 -->
+              <div class="bg-black/60 p-3.5 rounded-xl border border-purple-500/40 space-y-2.5">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-purple-400">Server 2 (Port 3002)</span>
-                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
+                  <span class="text-xs font-bold text-purple-400">Server 2 (Proxy 4052)</span>
+                  <span id="mon-status-2" class="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
                 </div>
-                <input type="text" id="mon-url-2" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
+                <div class="space-y-1">
+                  <label class="block text-[10px] text-zinc-400 font-medium">Reverse Proxy URL (Customer)</label>
+                  <input type="text" id="mon-url-2" placeholder="https://...trycloudflare.com" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-purple-500/60">
+                </div>
+                <div class="space-y-1">
+                  <label class="block text-[10px] text-amber-400/90 font-medium">Main Account Login URL (VNC)</label>
+                  <input type="text" id="login-url-2" placeholder="https://... (or VPS Port 3002)" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none focus:border-amber-500/60">
+                </div>
                 <div class="grid grid-cols-2 gap-2 pt-0.5">
                   <button onclick="openMonitorWindow(2)" class="w-full py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
                     <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
@@ -243,14 +265,33 @@
                     <span>Logout Account</span>
                   </button>
                 </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <button onclick="openMainLoginWindow(2)" class="w-full py-1.5 bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-black border border-amber-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                    <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
+                    <span>Main Login</span>
+                  </button>
+                  <button id="sync-btn-2" onclick="syncMonitorToProxy(2)" class="w-full py-1.5 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-black border border-emerald-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    <span>Sync Proxy</span>
+                  </button>
+                </div>
+                <div id="mon-meta-2" class="text-[10px] text-zinc-500 font-mono truncate">Status: Waiting for check...</div>
               </div>
 
-              <div class="bg-black/60 p-3.5 rounded-xl border border-pink-500/40 space-y-2">
+              <!-- SERVER 3 -->
+              <div class="bg-black/60 p-3.5 rounded-xl border border-pink-500/40 space-y-2.5">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-pink-400">Server 3 (Port 3003)</span>
-                  <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
+                  <span class="text-xs font-bold text-pink-400">Server 3 (Proxy 4053)</span>
+                  <span id="mon-status-3" class="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full font-mono font-bold">READY</span>
                 </div>
-                <input type="text" id="mon-url-3" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none">
+                <div class="space-y-1">
+                  <label class="block text-[10px] text-zinc-400 font-medium">Reverse Proxy URL (Customer)</label>
+                  <input type="text" id="mon-url-3" placeholder="https://...trycloudflare.com" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-pink-500/60">
+                </div>
+                <div class="space-y-1">
+                  <label class="block text-[10px] text-amber-400/90 font-medium">Main Account Login URL (VNC)</label>
+                  <input type="text" id="login-url-3" placeholder="https://... (or VPS Port 3003)" class="w-full bg-[#111114] border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none focus:border-amber-500/60">
+                </div>
                 <div class="grid grid-cols-2 gap-2 pt-0.5">
                   <button onclick="openMonitorWindow(3)" class="w-full py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
                     <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
@@ -261,32 +302,31 @@
                     <span>Logout Account</span>
                   </button>
                 </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <button onclick="openMainLoginWindow(3)" class="w-full py-1.5 bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-black border border-amber-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                    <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
+                    <span>Main Login</span>
+                  </button>
+                  <button id="sync-btn-3" onclick="syncMonitorToProxy(3)" class="w-full py-1.5 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-black border border-emerald-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    <span>Sync Proxy</span>
+                  </button>
+                </div>
+                <div id="mon-meta-3" class="text-[10px] text-zinc-500 font-mono truncate">Status: Waiting for check...</div>
               </div>
             </div>
 
-            <div class="flex justify-end">
+            <div class="flex flex-wrap items-center justify-end gap-2">
+              <button onclick="syncAllMonitorsToProxy()" id="sync-all-btn" class="px-4 py-2 bg-cyan-500/20 hover:bg-cyan-500 text-cyan-300 hover:text-black border border-cyan-500/40 font-semibold text-xs rounded-xl flex items-center space-x-1.5 transition shadow">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>Sync All 3 Monitors</span>
+              </button>
               <button onclick="saveManualUrls()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl flex items-center space-x-1.5 transition shadow">
                 <i data-lucide="save" class="w-3.5 h-3.5"></i>
                 <span>Save URLs to Database</span>
               </button>
             </div>
           </div>
-        </section>
-
-        <!-- ================= TAB: LIVE 3-SLOTS STATUS ================= -->
-        <section id="section-slots" class="hidden space-y-5">
-          <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
-            <div>
-              <h2 class="text-sm font-bold text-white">Live Client Slots Status (1 - 3)</h2>
-              <p class="text-xs text-zinc-400">গ্রাহকরা ৩টি স্বাধীন স্লটে ভাগ হয়ে ভিডিও তৈরি করছেন</p>
-            </div>
-            <button onclick="initOrReset3Slots()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded-xl flex items-center space-x-1.5 transition">
-              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-              <span>Reset 3 Slots Status</span>
-            </button>
-          </div>
-
-          <div id="slots-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
         </section>
 
         <!-- ================= TAB: MAINTENANCE ================= -->
@@ -481,16 +521,84 @@
 
     const adminAuth = document.getElementById('admin-auth-screen');
     const adminMain = document.getElementById('admin-main-app');
+    let adminUnsubs = [];
+    let modVerifyUnsub = null;
 
-    function checkAdminSession() {
-      const role = sessionStorage.getItem('flow_admin_role');
-      if (role) {
-        adminAuth.classList.add('hidden');
-        adminMain.classList.remove('hidden');
-        document.getElementById('admin-role-badge').textContent = role.toUpperCase();
-        document.getElementById('admin-role-badge-mob').textContent = role.toUpperCase();
-        startAdminSync();
+    function stopAllAdminListeners() {
+      if (modVerifyUnsub) {
+        try { modVerifyUnsub(); } catch(e) {}
+        modVerifyUnsub = null;
       }
+      adminUnsubs.forEach(fn => { try { fn(); } catch(e) {} });
+      adminUnsubs = [];
+    }
+
+    function handleAdminLogout(reasonMsg) {
+      stopAllAdminListeners();
+      try {
+        sessionStorage.removeItem('flow_admin_role');
+        sessionStorage.removeItem('flow_admin_email');
+        sessionStorage.removeItem('flow_admin_mod_id');
+        sessionStorage.clear();
+      } catch(e) {}
+
+      const sb = document.getElementById('admin-sidebar');
+      const bd = document.getElementById('sidebar-backdrop');
+      if (sb) sb.classList.add('-translate-x-full');
+      if (bd) bd.classList.add('hidden');
+
+      adminMain.classList.add('hidden');
+      adminAuth.classList.remove('hidden');
+
+      const form = document.getElementById('admin-login-form');
+      if (form) form.reset();
+      const errBox = document.getElementById('admin-login-error');
+      if (errBox) {
+        if (reasonMsg) {
+          errBox.textContent = reasonMsg;
+          errBox.classList.remove('hidden');
+        } else {
+          errBox.textContent = '';
+          errBox.classList.add('hidden');
+        }
+      }
+      renderIcons();
+    }
+
+    async function checkAdminSession() {
+      const role = sessionStorage.getItem('flow_admin_role');
+      if (!role) return;
+
+      if (role === 'Moderator') {
+        const modId = sessionStorage.getItem('flow_admin_mod_id');
+        const modEmail = (sessionStorage.getItem('flow_admin_email') || '').trim().toLowerCase();
+        if (!modId || !modEmail) {
+          handleAdminLogout();
+          return;
+        }
+        try {
+          const modDoc = await db.collection('moderators').doc(modId).get();
+          if (!modDoc.exists || modDoc.data().active === false || (modDoc.data().email || '').trim().toLowerCase() !== modEmail) {
+            handleAdminLogout("আপনার মডারেটর অ্যাকাউন্টটি ডিলিট বা বাতিল করা হয়েছে।");
+            return;
+          }
+          if (modVerifyUnsub) { try { modVerifyUnsub(); } catch(e) {} }
+          modVerifyUnsub = db.collection('moderators').doc(modId).onSnapshot(snap => {
+            if (!snap.exists || snap.data().active === false) {
+              handleAdminLogout("আপনার মডারেটর অ্যাকাউন্টটি ডিলিট বা বাতিল করা হয়েছে।");
+            }
+          });
+        } catch(err) {
+          handleAdminLogout();
+          return;
+        }
+      }
+
+      adminAuth.classList.add('hidden');
+      adminMain.classList.remove('hidden');
+      document.getElementById('admin-role-badge').textContent = role.toUpperCase();
+      document.getElementById('admin-role-badge-mob').textContent = role.toUpperCase();
+      startAdminSync();
     }
 
     document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
@@ -503,20 +611,28 @@
 
       if ((em === 'superadmin@flowstudio.com' || em === 'admin@flowstudio.com') && ps === '#Superadmin@tuhin') {
         sessionStorage.setItem('flow_admin_role', 'Superadmin');
-        checkAdminSession();
+        sessionStorage.setItem('flow_admin_email', em);
+        sessionStorage.removeItem('flow_admin_mod_id');
+        await checkAdminSession();
         return;
       }
 
       try {
-        const snap = await db.collection('moderators').where('email', '==', em).get();
-        if (!snap.empty) {
-          let mod = null;
-          snap.forEach(d => mod = d.data());
-          if (mod.password === ps) {
-            sessionStorage.setItem('flow_admin_role', 'Moderator');
-            checkAdminSession();
-            return;
+        const snap = await db.collection('moderators').get();
+        let matchedModId = null;
+        snap.forEach(d => {
+          const data = d.data() || {};
+          const docEmail = (data.email || '').trim().toLowerCase();
+          if (docEmail === em && data.password === ps && data.active !== false) {
+            matchedModId = d.id;
           }
+        });
+        if (matchedModId) {
+          sessionStorage.setItem('flow_admin_role', 'Moderator');
+          sessionStorage.setItem('flow_admin_email', em);
+          sessionStorage.setItem('flow_admin_mod_id', matchedModId);
+          await checkAdminSession();
+          return;
         }
       } catch(err) {}
 
@@ -524,27 +640,139 @@
       errBox.classList.remove('hidden');
     });
 
-    document.getElementById('admin-logout-btn').addEventListener('click', () => {
-      sessionStorage.clear();
-      location.reload();
-    });
-
-    function getCleanUrl(slotNum) {
-      const raw = document.getElementById(`mon-url-${slotNum}`) ? document.getElementById(`mon-url-${slotNum}`).value.trim() : '';
-      if (!raw) return `http://15.235.246.137:${3000 + slotNum}`;
-      if (raw.startsWith('http://') || raw.startsWith('https://')) return raw.replace(/\/+$/, '');
-      return `https://${raw.replace(/\/+$/, '')}`;
+    function normalizeUrl(raw, fallbackUrl) {
+      const val = (raw || '').trim();
+      if (!val) return fallbackUrl;
+      if (val.startsWith('http://') || val.startsWith('https://')) return val.replace(/\/+$/, '');
+      return `https://${val.replace(/\/+$/, '')}`;
     }
 
+    function getCleanProxyUrl(slotNum) {
+      const el = document.getElementById(`mon-url-${slotNum}`);
+      return normalizeUrl(el ? el.value : '', `http://15.235.246.137:${4050 + slotNum}`);
+    }
+
+    function getCleanLoginUrl(slotNum) {
+      const el = document.getElementById(`login-url-${slotNum}`);
+      return normalizeUrl(el ? el.value : '', `http://15.235.246.137:${3000 + slotNum}`);
+    }
+
+    // রিভার্স প্রক্সি প্রিভিউ উইন্ডো ওপেন
     function openMonitorWindow(slotNum) {
-      const clean = getCleanUrl(slotNum);
-      const targetUrl = `${clean}/?autoconnect=1&resize=scale&quality=8&cursor=local&control_bar=0&clipboard=0`;
-      window.open(targetUrl, `MonitorWindow_${slotNum}`, 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
+      const clean = getCleanProxyUrl(slotNum);
+      window.open(`${clean}/`, `ProxyWindow_${slotNum}`, 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
     }
 
-    // ================= ৩টি মনিটরের গুগল অ্যাকাউন্ট লগ-আউট ফাংশন (অ্যাকাউন্ট ডিলিট না করে সেভ রেখে লগ-আউট) =================
+    // মেইন গুগল অ্যাকাউন্ট লগইন উইন্ডো (VNC) ওপেন
+    function openMainLoginWindow(slotNum) {
+      const clean = getCleanLoginUrl(slotNum);
+      const targetUrl = `${clean}/?autoconnect=1&resize=scale&quality=8&cursor=local&control_bar=0&clipboard=0`;
+      window.open(targetUrl, `MainLoginWindow_${slotNum}`, 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
+    }
+
+    function setMonitorBadge(slotNum, state, metaText) {
+      const badge = document.getElementById(`mon-status-${slotNum}`);
+      const meta = document.getElementById(`mon-meta-${slotNum}`);
+      if (badge) {
+        if (state === 'active') {
+          badge.className = "text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold";
+          badge.textContent = "SYNCED";
+        } else if (state === 'syncing') {
+          badge.className = "text-[10px] bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded-full font-mono font-bold";
+          badge.textContent = "SYNCING...";
+        } else if (state === 'inactive') {
+          badge.className = "text-[10px] bg-amber-950 text-amber-300 px-2 py-0.5 rounded-full font-mono font-bold";
+          badge.textContent = "LOGIN NEEDED";
+        } else {
+          badge.className = "text-[10px] bg-red-950 text-red-400 px-2 py-0.5 rounded-full font-mono font-bold";
+          badge.textContent = "OFFLINE";
+        }
+      }
+      if (meta && metaText) {
+        meta.textContent = metaText;
+      }
+    }
+
+    async function checkProxyStatus(slotNum) {
+      const proxyUrl = getCleanProxyUrl(slotNum);
+      if (!proxyUrl) return;
+      try {
+        const res = await fetch(`${proxyUrl}/__proxy_status__`, { method: 'GET', cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.active) {
+          setMonitorBadge(slotNum, 'active', `Active • ${data.cookies || 0} cookies synced`);
+        } else {
+          setMonitorBadge(slotNum, 'inactive', `Not Logged In • ${data.cookies || 0} cookies`);
+        }
+      } catch (err) {
+        setMonitorBadge(slotNum, 'offline', `Status unreachable (Check proxy URL)`);
+      }
+    }
+
+    // মেইন অ্যাকাউন্ট লগইন করার পর সরাসরি রিভার্স প্রক্সিতে সিঙ্ক বাটন ফাংশন
+    async function syncMonitorToProxy(slotNum) {
+      const proxyUrl = getCleanProxyUrl(slotNum);
+      const btn = document.getElementById(`sync-btn-${slotNum}`);
+      if (!proxyUrl) {
+        showToast(`Server ${slotNum}-এর Reverse Proxy URL দিন!`);
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i><span>Syncing...</span>`;
+        renderIcons();
+      }
+      setMonitorBadge(slotNum, 'syncing', `Syncing cookies from Server ${slotNum}...`);
+
+      try {
+        const res = await fetch(`${proxyUrl}/__sync_now__`, {
+          method: 'POST',
+          cache: 'no-store'
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        await db.collection('server_slots').doc(`slot_${slotNum}`).set({
+          slotNumber: slotNum,
+          port: 4050 + slotNum,
+          url: proxyUrl,
+          loginUrl: getCleanLoginUrl(slotNum),
+          proxyActive: Boolean(data.active),
+          syncedCookies: data.cookies || 0,
+          lastSyncedAt: Date.now()
+        }, { merge: true });
+
+        if (data.active) {
+          setMonitorBadge(slotNum, 'active', `Synced • ${data.cookies || 0} cookies active`);
+          showToast(`Server ${slotNum} সফলভাবে রিভার্স প্রক্সিতে সিঙ্ক হয়েছে (${data.cookies} cookies)!`);
+        } else {
+          setMonitorBadge(slotNum, 'inactive', `Login needed • ${data.cookies || 0} cookies`);
+          showToast(`Server ${slotNum} সিঙ্ক হয়েছে, কিন্তু গুগল অ্যাকাউন্ট লগইন পাওয়া যায়নি! আগে "Main Login" দিয়ে লগইন করুন।`);
+        }
+      } catch (err) {
+        setMonitorBadge(slotNum, 'offline', `Sync failed: ${err.message}`);
+        showToast(`Server ${slotNum} সিঙ্ক ব্যর্থ হয়েছে! ভিপিএস-এ /__sync_now__ আপডেট চালু আছে কিনা দেখুন।`);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i><span>Sync Proxy</span>`;
+          renderIcons();
+        }
+      }
+    }
+
+    async function syncAllMonitorsToProxy() {
+      const btn = document.getElementById('sync-all-btn');
+      if (btn) btn.disabled = true;
+      await Promise.all([1, 2, 3].map(n => syncMonitorToProxy(n)));
+      if (btn) btn.disabled = false;
+    }
+
+    // ৩টি মনিটরের গুগল অ্যাকাউন্ট লগ-আউট ফাংশন
     async function logoutMonitorAccount(slotNum) {
-      if (confirm(`Server ${slotNum} (Port ${3000 + slotNum})-এর গুগল অ্যাকাউন্টটি লগ আউট করতে চান? অ্যাকাউন্টটি ডিলিট হবে না, সেভ অবস্থায় লগইন লিস্টে থাকবে।`)) {
+      if (confirm(`Server ${slotNum}-এর গুগল অ্যাকাউন্টটি লগ আউট করতে চান? অ্যাকাউন্টটি ডিলিট হবে না, সেভ অবস্থায় লগইন লিস্টে থাকবে।`)) {
         try {
           await db.collection('server_slots').doc(`slot_${slotNum}`).set({
             logout_google_trigger: Date.now()
@@ -558,21 +786,33 @@
 
     async function saveManualUrls() {
       for (let i = 1; i <= 3; i++) {
-        const val = document.getElementById(`mon-url-${i}`).value.trim();
-        if (val) {
-          let clean = val.startsWith('http://') || val.startsWith('https://') ? val.replace(/\/+$/, '') : `https://${val.replace(/\/+$/, '')}`;
-          await db.collection('server_slots').doc(`slot_${i}`).set({
-            slotNumber: i,
-            port: 3000 + i,
-            url: clean
-          }, { merge: true });
+        const proxyVal = document.getElementById(`mon-url-${i}`).value.trim();
+        const loginVal = document.getElementById(`login-url-${i}`).value.trim();
+        const payload = {
+          slotNumber: i,
+          port: 4050 + i
+        };
+        if (proxyVal) payload.url = normalizeUrl(proxyVal, '');
+        if (loginVal) payload.loginUrl = normalizeUrl(loginVal, '');
+        if (proxyVal || loginVal) {
+          await db.collection('server_slots').doc(`slot_${i}`).set(payload, { merge: true });
         }
       }
-      showToast("Monitor URLs Saved to Database!");
+      showToast("Monitor & Login URLs Saved to Database!");
+      [1, 2, 3].forEach(n => checkProxyStatus(n));
     }
 
+    const TAB_TITLES = {
+      customers: 'Customer & Subscription Management',
+      monitors: '3-Monitor Reverse Proxy & Sync Hub',
+      maintenance: 'Maintenance Hub',
+      models: 'AI Model Controls',
+      team: 'Moderator Admins',
+      branding: 'Branding & Logo Settings'
+    };
+
     function switchTab(t) {
-      ['customers', 'monitors', 'slots', 'maintenance', 'models', 'team', 'branding'].forEach(tab => {
+      ['customers', 'monitors', 'maintenance', 'models', 'team', 'branding'].forEach(tab => {
         const sec = document.getElementById(`section-${tab}`);
         if (sec) sec.classList.toggle('hidden', tab !== t);
         const btn = document.getElementById(`tab-btn-${tab}`);
@@ -582,6 +822,11 @@
             : "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:bg-[#1f1f26] text-xs font-medium transition";
         }
       });
+      const titleEl = document.getElementById('tab-title');
+      if (titleEl && TAB_TITLES[t]) titleEl.textContent = TAB_TITLES[t];
+      if (t === 'monitors') {
+        [1, 2, 3].forEach(n => checkProxyStatus(n));
+      }
       renderIcons();
     }
 
@@ -598,20 +843,6 @@
             activeDevices: [],
             assignedProjectUrl: ""
           });
-
-          for (let i = 1; i <= 3; i++) {
-            const slotRef = db.collection('server_slots').doc(`slot_${i}`);
-            const sDoc = await slotRef.get();
-            if (sDoc.exists && sDoc.data().activeUid === uid) {
-              await slotRef.update({
-                isBusy: false,
-                activeUid: "",
-                userEmail: "",
-                claimedAt: null
-              });
-            }
-          }
-
           showToast("গ্রাহকের সেশন ও প্রজেক্ট রিসেট সম্পন্ন হয়েছে!");
         } catch(err) {
           showToast("রিসেট ত্রুটি: " + err.message);
@@ -619,87 +850,61 @@
       }
     }
 
-    async function initOrReset3Slots() {
-      if (confirm("৩টি স্লটের স্ট্যাটাস ক্লিয়ার করতে চান?")) {
-        for (let i = 1; i <= 3; i++) {
-          await db.collection('server_slots').doc(`slot_${i}`).set({
-            slotNumber: i,
-            port: 3000 + i,
-            isBusy: false,
-            activeUid: "",
-            userEmail: "",
-            claimedAt: null
-          }, { merge: true });
-        }
-        showToast("৩টি স্লট রিসেট সম্পন্ন হয়েছে!");
-      }
-    }
-
     function startAdminSync() {
-      db.collection('server_slots').onSnapshot(snap => {
-        const grid = document.getElementById('slots-grid');
-        grid.innerHTML = '';
-        const sortedDocs = snap.docs.sort((a,b) => (a.data().port || 0) - (b.data().port || 0));
-        
-        sortedDocs.forEach(doc => {
-          const s = doc.data();
-          const num = s.slotNumber || (s.port - 3000);
-          
-          if (document.getElementById(`mon-url-${num}`) && s.url) {
-            document.getElementById(`mon-url-${num}`).value = s.url;
+      adminUnsubs.forEach(fn => { try { fn(); } catch(e) {} });
+      adminUnsubs = [];
+
+      adminUnsubs.push(db.collection('server_slots').onSnapshot(snap => {
+        snap.docs.forEach(doc => {
+          const s = doc.data() || {};
+          const num = s.slotNumber || Number(doc.id.replace('slot_', '')) || 0;
+          if (num >= 1 && num <= 3) {
+            const monInput = document.getElementById(`mon-url-${num}`);
+            const loginInput = document.getElementById(`login-url-${num}`);
+            if (monInput && s.url && document.activeElement !== monInput) {
+              monInput.value = s.url;
+            }
+            if (loginInput && s.loginUrl && document.activeElement !== loginInput) {
+              loginInput.value = s.loginUrl;
+            }
+            if (s.url) checkProxyStatus(num);
           }
-
-          const card = document.createElement('div');
-          card.className = `p-4 rounded-2xl border ${s.isBusy ? 'bg-amber-950/20 border-amber-500/40' : 'bg-emerald-950/20 border-emerald-500/40'} flex flex-col justify-between space-y-3`;
-          card.innerHTML = `
-            <div>
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-white">Server #${num}</span>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${s.isBusy ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}">
-                  ${s.isBusy ? 'BUSY' : 'FREE'}
-                </span>
-              </div>
-              <div class="text-[11px] text-zinc-400 font-mono mt-1">Port: ${s.port}</div>
-              <div class="text-xs font-medium text-white truncate mt-2">${s.userEmail || '<span class="text-zinc-600">No User</span>'}</div>
-            </div>
-          `;
-          grid.appendChild(card);
         });
-      }, err => console.warn(err));
+      }, err => console.warn(err)));
 
-      db.collection('users').onSnapshot(snap => {
+      adminUnsubs.push(db.collection('users').onSnapshot(snap => {
         allUsers = [];
         snap.forEach(d => allUsers.push({ id: d.id, ...d.data() }));
         renderUsers();
-      }, err => console.warn(err));
+      }, err => console.warn(err)));
 
-      db.collection('models').onSnapshot(snap => {
+      adminUnsubs.push(db.collection('models').onSnapshot(snap => {
         allModels = [];
         snap.forEach(d => allModels.push({ docId: d.id, ...d.data() }));
         renderModelsList();
         updateModelDropdownOptions();
-      }, err => console.warn(err));
+      }, err => console.warn(err)));
 
-      db.collection('moderators').onSnapshot(snap => {
+      adminUnsubs.push(db.collection('moderators').onSnapshot(snap => {
         allMods = [];
         snap.forEach(d => allMods.push({ id: d.id, ...d.data() }));
         renderModerators();
-      }, err => console.warn(err));
+      }, err => console.warn(err)));
 
-      db.collection('settings').doc('admin_privacy').onSnapshot(doc => {
+      adminUnsubs.push(db.collection('settings').doc('admin_privacy').onSnapshot(doc => {
         if (doc.exists && typeof doc.data().active !== 'undefined') {
           isPrivacyOn = doc.data().active === true;
           updatePrivacyUI(isPrivacyOn);
         }
-      }, err => console.warn(err));
+      }, err => console.warn(err)));
 
-      db.collection('settings').doc('site_config').onSnapshot(doc => {
+      adminUnsubs.push(db.collection('settings').doc('site_config').onSnapshot(doc => {
         if (doc.exists) {
           const data = doc.data();
           if (data.siteName) document.getElementById('setting-site-name').value = data.siteName;
           if (data.dockLogoUrl) document.getElementById('setting-dock-logo').value = data.dockLogoUrl;
         }
-      }, err => console.warn(err));
+      }, err => console.warn(err)));
     }
 
     function updatePrivacyUI(active) {
@@ -770,7 +975,7 @@
         tr.innerHTML = `
           <td class="py-3 px-3 sm:px-4 font-medium text-white">${u.email}</td>
           <td class="py-3 px-3 sm:px-4 font-mono text-zinc-400">${u.password}</td>
-          <td class="py-3 px-3 sm:px-4 text-purple-400 font-medium">${u.assignedModel || 'Veo 3.1 - Lite'}</td>
+          <td class="py-3 px-3 sm:px-4 text-purple-400 font-medium">${u.assignedModel || 'Not Assigned'}</td>
           <td class="py-3 px-3 sm:px-4 font-mono text-zinc-300">${u.expiryDate || 'N/A'}</td>
           <td class="py-3 px-3 sm:px-4">
             <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${isExpired ? 'bg-red-950 text-red-400 border border-red-900' : 'bg-emerald-950 text-emerald-400 border border-emerald-900'}">
@@ -902,13 +1107,41 @@
       if (!email) return;
       const pass = prompt("Enter Moderator Password:");
       if (!pass) return;
-      await db.collection('moderators').add({ email: email.trim().toLowerCase(), password: pass.trim(), role: 'moderator' });
-      showToast("Moderator created!");
+      const cleanEmail = email.trim().toLowerCase();
+      const existingSnap = await db.collection('moderators').get();
+      let existingId = null;
+      existingSnap.forEach(d => {
+        if (((d.data().email || '').trim().toLowerCase()) === cleanEmail) existingId = d.id;
+      });
+      if (existingId) {
+        await db.collection('moderators').doc(existingId).update({ password: pass.trim(), active: true });
+        showToast("Moderator password updated!");
+      } else {
+        await db.collection('moderators').add({ email: cleanEmail, password: pass.trim(), role: 'moderator', active: true });
+        showToast("Moderator created!");
+      }
     }
 
     async function deleteModerator(id) {
       if (confirm("Delete this moderator?")) {
+        let targetEmail = '';
+        try {
+          const docSnap = await db.collection('moderators').doc(id).get();
+          if (docSnap.exists) targetEmail = (docSnap.data().email || '').trim().toLowerCase();
+        } catch(e) {}
+
         await db.collection('moderators').doc(id).delete();
+
+        if (targetEmail) {
+          const allSnap = await db.collection('moderators').get();
+          const delPromises = [];
+          allSnap.forEach(d => {
+            if (((d.data().email || '').trim().toLowerCase()) === targetEmail) {
+              delPromises.push(db.collection('moderators').doc(d.id).delete());
+            }
+          });
+          if (delPromises.length) await Promise.all(delPromises);
+        }
         showToast("Moderator removed!");
       }
     }
@@ -948,9 +1181,9 @@
       }
     }
     async function openAddModelModal() {
-      const name = prompt("Model Display Name (যেমন: Veo 3.1 lite [lower priority]):");
+      const name = prompt("Model Display Name:");
       if (!name) return;
-      const id = prompt("Model Identifier (যেমন: Veo 3.1 lite [lower priority]):");
+      const id = prompt("Model Identifier:");
       if (!id) return;
       await db.collection('models').add({ name: name.trim(), id: id.trim(), active: true });
       showToast("New model added!");
