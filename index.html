@@ -188,7 +188,7 @@
                   <i data-lucide="monitor" class="w-4 h-4"></i>
                   <span>৩টি মনিটরের রিভার্স প্রক্সি ও মেইন অ্যাকাউন্ট সিঙ্ক হাব</span>
                 </h3>
-                <p class="text-[11px] sm:text-xs text-zinc-400 mt-0.5">প্রথমে "Main Login" বাটনে ক্লিক করে গুগল অ্যাকাউন্ট লগইন করুন, এরপর পাশের "Sync Proxy" বাটনে ক্লিক করলেই সরাসরি রিভার্স প্রক্সিতে সিঙ্ক হয়ে যাবে।</p>
+                <p class="text-[11px] sm:text-xs text-zinc-400 mt-0.5">একবার "Main Login" দিয়ে লগইন করে "Sync Proxy" চাপলে ২৪/৭ সেশন অটো-রিফ্রেশ হয়ে চালু থাকবে; কেবল "Logout Account" চাপলেই লগআউট হবে।</p>
               </div>
 
               <div class="flex items-center space-x-2">
@@ -223,7 +223,7 @@
                     <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                     <span>Open Window</span>
                   </button>
-                  <button onclick="logoutMonitorAccount(1)" class="w-full py-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                  <button id="logout-btn-1" onclick="logoutMonitorAccount(1)" class="w-full py-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
                     <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
                     <span>Logout Account</span>
                   </button>
@@ -260,7 +260,7 @@
                     <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                     <span>Open Window</span>
                   </button>
-                  <button onclick="logoutMonitorAccount(2)" class="w-full py-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                  <button id="logout-btn-2" onclick="logoutMonitorAccount(2)" class="w-full py-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
                     <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
                     <span>Logout Account</span>
                   </button>
@@ -297,7 +297,7 @@
                     <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                     <span>Open Window</span>
                   </button>
-                  <button onclick="logoutMonitorAccount(3)" class="w-full py-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
+                  <button id="logout-btn-3" onclick="logoutMonitorAccount(3)" class="w-full py-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/40 font-semibold text-xs rounded-lg flex items-center justify-center gap-1 transition shadow">
                     <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
                     <span>Logout Account</span>
                   </button>
@@ -467,7 +467,6 @@
   </div>
 
   <script>
-    // ক্লিপবোর্ড পারমিশন ব্লক
     if (navigator.permissions && navigator.permissions.query) {
       const origQuery = navigator.permissions.query;
       navigator.permissions.query = function(params) {
@@ -643,8 +642,9 @@
     function normalizeUrl(raw, fallbackUrl) {
       const val = (raw || '').trim();
       if (!val) return fallbackUrl;
-      if (val.startsWith('http://') || val.startsWith('https://')) return val.replace(/\/+$/, '');
-      return `https://${val.replace(/\/+$/, '')}`;
+      const clean = val.split('?')[0].replace(/\/+$/, '');
+      if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
+      return `https://${clean}`;
     }
 
     function getCleanProxyUrl(slotNum) {
@@ -663,11 +663,10 @@
       window.open(`${clean}/`, `ProxyWindow_${slotNum}`, 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
     }
 
-    // মেইন গুগল অ্যাকাউন্ট লগইন উইন্ডো (VNC) ওপেন
+    // মেইন গুগল অ্যাকাউন্ট লগইন উইন্ডো (VNC) ওপেন - ক্লিন URL যাতে হ্যাং বা লোডিং সমস্যা না হয়
     function openMainLoginWindow(slotNum) {
       const clean = getCleanLoginUrl(slotNum);
-      const targetUrl = `${clean}/?autoconnect=1&resize=scale&quality=8&cursor=local&control_bar=0&clipboard=0`;
-      window.open(targetUrl, `MainLoginWindow_${slotNum}`, 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
+      window.open(`${clean}/`, `MainLoginWindow_${slotNum}`, 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
     }
 
     function setMonitorBadge(slotNum, state, metaText) {
@@ -676,10 +675,13 @@
       if (badge) {
         if (state === 'active') {
           badge.className = "text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-mono font-bold";
-          badge.textContent = "SYNCED";
+          badge.textContent = "SYNCED 24/7";
         } else if (state === 'syncing') {
           badge.className = "text-[10px] bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded-full font-mono font-bold";
           badge.textContent = "SYNCING...";
+        } else if (state === 'logging_out') {
+          badge.className = "text-[10px] bg-red-950 text-red-300 px-2 py-0.5 rounded-full font-mono font-bold";
+          badge.textContent = "LOGGING OUT...";
         } else if (state === 'inactive') {
           badge.className = "text-[10px] bg-amber-950 text-amber-300 px-2 py-0.5 rounded-full font-mono font-bold";
           badge.textContent = "LOGIN NEEDED";
@@ -701,9 +703,9 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         if (data.active) {
-          setMonitorBadge(slotNum, 'active', `Active • ${data.cookies || 0} cookies synced`);
+          setMonitorBadge(slotNum, 'active', `Active 24/7 • ${data.cookies || 0} cookies locked`);
         } else {
-          setMonitorBadge(slotNum, 'inactive', `Not Logged In • ${data.cookies || 0} cookies`);
+          setMonitorBadge(slotNum, 'inactive', `Logged Out • Click Main Login & Sync`);
         }
       } catch (err) {
         setMonitorBadge(slotNum, 'offline', `Status unreachable (Check proxy URL)`);
@@ -745,15 +747,15 @@
         }, { merge: true });
 
         if (data.active) {
-          setMonitorBadge(slotNum, 'active', `Synced • ${data.cookies || 0} cookies active`);
-          showToast(`Server ${slotNum} সফলভাবে রিভার্স প্রক্সিতে সিঙ্ক হয়েছে (${data.cookies} cookies)!`);
+          setMonitorBadge(slotNum, 'active', `Active 24/7 • ${data.cookies || 0} cookies locked`);
+          showToast(`Server ${slotNum} সফলভাবে ২৪/৭ সেশনের জন্য সিঙ্ক হয়েছে (${data.cookies} cookies)!`);
         } else {
           setMonitorBadge(slotNum, 'inactive', `Login needed • ${data.cookies || 0} cookies`);
-          showToast(`Server ${slotNum} সিঙ্ক হয়েছে, কিন্তু গুগল অ্যাকাউন্ট লগইন পাওয়া যায়নি! আগে "Main Login" দিয়ে লগইন করুন।`);
+          showToast(`Server ${slotNum}-এ গুগল লগইন পাওয়া যায়নি! আগে "Main Login" দিয়ে লগইন করুন।`);
         }
       } catch (err) {
         setMonitorBadge(slotNum, 'offline', `Sync failed: ${err.message}`);
-        showToast(`Server ${slotNum} সিঙ্ক ব্যর্থ হয়েছে! ভিপিএস-এ /__sync_now__ আপডেট চালু আছে কিনা দেখুন।`);
+        showToast(`Server ${slotNum} সিঙ্ক ব্যর্থ হয়েছে!`);
       } finally {
         if (btn) {
           btn.disabled = false;
@@ -770,16 +772,44 @@
       if (btn) btn.disabled = false;
     }
 
-    // ৩টি মনিটরের গুগল অ্যাকাউন্ট লগ-আউট ফাংশন
+    // ================= আসল সার্ভার ও প্রক্সি লগ-আউট ফাংশন (শুধু এই বাটনে চাপলেই লগআউট হবে) =================
     async function logoutMonitorAccount(slotNum) {
-      if (confirm(`Server ${slotNum}-এর গুগল অ্যাকাউন্টটি লগ আউট করতে চান? অ্যাকাউন্টটি ডিলিট হবে না, সেভ অবস্থায় লগইন লিস্টে থাকবে।`)) {
-        try {
-          await db.collection('server_slots').doc(`slot_${slotNum}`).set({
-            logout_google_trigger: Date.now()
-          }, { merge: true });
-          showToast(`Server ${slotNum}-এর অ্যাকাউন্ট সেভ রেখে লগ আউট সম্পন্ন হয়েছে!`);
-        } catch (err) {
-          showToast("লগ আউট ত্রুটি: " + err.message);
+      if (!confirm(`Server ${slotNum}-এর গুগল অ্যাকাউন্টটি সম্পূর্ণ লগ আউট করতে চান? লগআউট করলে পুনরায় "Main Login" দিয়ে লগইন করতে হবে।`)) {
+        return;
+      }
+
+      const proxyUrl = getCleanProxyUrl(slotNum);
+      const btn = document.getElementById(`logout-btn-${slotNum}`);
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i><span>Logging out...</span>`;
+        renderIcons();
+      }
+      setMonitorBadge(slotNum, 'logging_out', `Logging out Server ${slotNum}...`);
+
+      try {
+        const res = await fetch(`${proxyUrl}/__logout_now__`, {
+          method: 'POST',
+          cache: 'no-store'
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        await db.collection('server_slots').doc(`slot_${slotNum}`).set({
+          proxyActive: false,
+          syncedCookies: 0,
+          logout_google_trigger: Date.now()
+        }, { merge: true });
+
+        setMonitorBadge(slotNum, 'inactive', `Logged Out by Admin`);
+        showToast(`Server ${slotNum}-এর অ্যাকাউন্ট সফলভাবে লগ আউট সম্পন্ন হয়েছে!`);
+      } catch (err) {
+        setMonitorBadge(slotNum, 'offline', `Logout error: ${err.message}`);
+        showToast("লগ আউট ত্রুটি: " + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="log-out" class="w-3.5 h-3.5"></i><span>Logout Account</span>`;
+          renderIcons();
         }
       }
     }
@@ -835,9 +865,8 @@
     let allMods = [];
     let isPrivacyOn = false;
 
-    // নির্ভরযোগ্য গ্রাহক সেশন ও প্রজেক্ট রিসেট ফাংশন
     async function resetCustomerSession(uid) {
-      if (confirm("এই গ্রাহকের ডিভাইস লিংক ও সংরক্ষিত প্রজেক্ট রিসেট করতে চান? পরবর্তী লগইনে সম্পূর্ণ নতুন প্রজেক্ট তৈরি হবে।")) {
+      if (confirm("এই গ্রাহকের ডিভাইস লিংক ও সংরক্ষিত প্রজেক্ট রিসেট করতে চান?")) {
         try {
           await db.collection('users').doc(uid).update({
             activeDevices: [],
